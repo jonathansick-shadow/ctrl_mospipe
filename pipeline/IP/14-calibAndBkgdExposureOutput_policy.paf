@@ -1,0 +1,22 @@
+AdditionalData: "visitId=triggerImageprocEvent0.visitId"
+AdditionalData: "exposureId=triggerImageprocEvent0.exposureId"
+AdditionalData: "ccdId=ccdId"
+AdditionalData: "ampId=ampId"
+OutputItems: {
+    calibratedExposure0: {
+        Type: "ExposureF"
+        PythonType: "lsst.afw.image.ExposureF"
+        StoragePolicy: {
+            Storage: "FitsStorage"
+            Location: "%(output)/isr/v%(visitId)-e%(exposureId)/v%(visitId)-e%(exposureId)-c%03d(ccdId)-a%02d(ampId).isr"
+        }
+    }
+    backgroundSubtractedExposure0: {
+        Type: "ExposureF"
+        PythonType: "lsst.afw.image.ExposureF"
+        StoragePolicy: {
+            Storage: "FitsStorage"
+            Location: "%(output)/bkgd/v%(visitId)-e%(exposureId)/v%(visitId)-e%(exposureId)-c%03d(ccdId)-a%02d(ampId).bkgd"
+        }
+    }
+}

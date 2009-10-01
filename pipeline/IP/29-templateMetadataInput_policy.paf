@@ -1,0 +1,16 @@
+AdditionalData: "datasetId=triggerImageprocEvent0.datasetId"
+AdditionalData: "visitId=triggerImageprocEvent0.visitId"
+AdditionalData: "exposureId=triggerImageprocEvent0.exposureId"
+AdditionalData: "ccdId=ccdId"
+AdditionalData: "ampId=ampId"
+AdditionalData: "filter=triggerImageprocEvent0.filter"
+InputItems: {
+    templateWcs: {
+        Type: "Wcs"
+        PythonType: "lsst.afw.image.Wcs"
+        StoragePolicy: {
+            Storage: "FitsStorage"
+            Location: "%(input)/template/%(datasetId)/25/%(filter)/T0004_%(datasetId)_25_%(filter)_img.fits"
+        }
+    }
+}

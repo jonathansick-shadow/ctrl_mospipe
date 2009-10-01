@@ -1,0 +1,10 @@
+# Setup for CTIO Mosaic2 in 8 readout mode
+# 
+nAmps: 1
+nCcds: 8
+ccdIdFormula: "sliceId / nAmps"
+ampIdFormula: "sliceId % nAmps"
+#
+# Probably unneeded...
+#
+#ampBBoxDbPath: "/lsst/images/repository/calib/cfhtAmpBBoxPolicy.paf"

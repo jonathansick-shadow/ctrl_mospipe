@@ -1,0 +1,7 @@
+metadata: @dc3MetadataPolicy.paf
+datatype: @datatypePolicy/cfhtDataTypePolicy.paf
+suffix: Keyword
+imageKey: rawCameraImage1
+metadataKey: rawImageMetadata1
+exposureMetadataKey: exposureMetadata1
+computeWcsGuess: false

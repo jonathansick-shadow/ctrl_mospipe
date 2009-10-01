@@ -1,0 +1,27 @@
+#<?cfg paf dictionary ?>
+#
+# Determine Wcs for one visit
+# Is this one crudely coadded image or one or both exposures of the visit?
+# For now we decided to only detect on the first exposure of the visit.
+#
+exposureKeyList: "calibratedExposure0" "calibratedExposure1"
+sourceSetKey: "ccdWcsSources"
+ampBBoxKey: "ampBBox"
+outputCcdWcsKey: "ccdWcs"
+
+# Minimum flux of sources for WCS determination; default is 1000.0
+fluxLimit: 20000.0
+# Inform the solver that the image may suffer from some distortion. Leave this on if a purely linear wcs solution
+# will get the postions of some stars wrong by more than 1 pixel. Default is true
+allowDistortion: true
+# How good does a match need to be to be accepted. Typical value is log(1e12) = 27.631
+matchThreshold: 27.631
+
+#Only use the brightest N objects in a match. This value must be >= 20. A good upper bound
+#hasn't yet been determined, but probably around the range 20...60
+brightestNStars : 45
+
+# Range of allowed fit pixel scale = [input scale/pixelScaleRangeFactor, input scale * pixelScaleRangeFactor]
+# must be >= 1.0; defaults to 1.1
+pixelScaleRangeFactor: 2.0
+ccdDimensions: @datatypePolicy/cfhtCcdDimensionsPolicy.paf

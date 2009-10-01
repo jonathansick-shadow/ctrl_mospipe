@@ -1,0 +1,12 @@
+RunMode: preprocess
+
+Links: {
+	sourcePath: /home/tsa/Precursor/Mosaic2/raw
+	destPath: %(input)/raw
+}
+
+Links: {
+	sourcePath: /home/tsa/Precursor/Mosaic2/calib
+	destPath: %(input)/calib
+}
+

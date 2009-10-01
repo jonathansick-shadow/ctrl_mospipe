@@ -1,0 +1,3 @@
+01-sliceInfo_policy.paf
+	What is this ampBBox stuff? "Bounding box of each Amp image in master CCD image"
+

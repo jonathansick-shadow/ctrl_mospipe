@@ -1,0 +1,30 @@
+AdditionalData: "ampExposureId=exposureMetadata0.ampExposureId"
+AdditionalData: "ccdExposureId=exposureMetadata0.ccdExposureId"
+AdditionalData: "exposureId=exposureMetadata0.fpaExposureId"
+
+OutputItems: {
+    psfDeterminationRatingSet: {
+        Type: "PersistableSdqaRatingVector"
+        PythonType: "lsst.sdqa.PersistableSdqaRatingVector"
+        StoragePolicy: {
+            Storage: "DbStorage"
+            Location: "%(dbUrl)"
+        }
+    }
+    isrRatingSet0: {
+        Type: "PersistableSdqaRatingVector"
+        PythonType: "lsst.sdqa.PersistableSdqaRatingVector"
+        StoragePolicy: {
+            Storage: "DbStorage"
+            Location: "%(dbUrl)"
+        }
+    }
+    diffimRatingSet0: {
+        Type: "PersistableSdqaRatingVector"
+        PythonType: "lsst.sdqa.PersistableSdqaRatingVector"
+        StoragePolicy: {
+            Storage: "DbStorage"
+            Location: "%(dbUrl)"
+        }
+    }
+}

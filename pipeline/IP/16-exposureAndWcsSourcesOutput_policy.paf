@@ -1,0 +1,51 @@
+AdditionalData: "datasetId=triggerImageprocEvent0.datasetId"
+AdditionalData: "visitId=triggerImageprocEvent0.visitId"
+AdditionalData: "exposureId=triggerImageprocEvent0.exposureId"
+AdditionalData: "ampExposureId=exposureMetadata0.ampExposureId"
+AdditionalData: "ccdExposureId=exposureMetadata0.ccdExposureId"
+AdditionalData: "fpaExposureId=exposureMetadata0.fpaExposureId"
+AdditionalData: "filterId=exposureMetadata0.filterId"
+AdditionalData: "ccdId=ccdId"
+AdditionalData: "ampId=ampId"
+OutputItems: {
+#    calibratedExposure0: {
+#        Type: "ExposureF"
+#        PythonType: "lsst.afw.image.ExposureF"
+#        StoragePolicy: {
+#            Storage: "FitsStorage"
+#            Location: "%(output)/isr/v%(visitId)-e%(exposureId)/c%03d(ccdId)-a%02d(ampId)"
+#        }
+#    }
+#    backgroundSubtractedExposure0: {
+#        Type: "ExposureF"
+#        PythonType: "lsst.afw.image.ExposureF"
+#        StoragePolicy: {
+#            Storage: "FitsStorage"
+#            Location: "%(output)/bkg/v%(visitId)-e%(exposureId)/c%03d(ccdId)-a%02d(ampId)"
+#        }
+#    }
+    persistable_sourceSet0: {
+       Type: "PersistableSourceVector"
+       PythonType: "lsst.afw.detection.PersistableSourceVector"
+# Persist to both Boost and Db for testing
+       StoragePolicy: {
+           Storage: "BoostStorage"
+           Location: "%(output)/wcssrc/v%(visitId)-e%(exposureId)/v%(visitId)-e%(exposureId)-c%03d(ccdId)-a%02d(ampId).wcssrc.boost"
+       }
+       StoragePolicy: {
+           Storage: "DbStorage"
+           Location: "%(dbUrl)"
+       }
+    }
+}
+
+Persistence: {
+    Formatter: {
+        PersistableSourceVector: {
+            persistable_sourceSet0: {
+                templateTableName: "_tmpl_WCSSource"
+                tableNamePattern: "_tmp_v%(visitId)_c%03d(ccdId)_WcsSource"
+            }
+        }
+    }
+}

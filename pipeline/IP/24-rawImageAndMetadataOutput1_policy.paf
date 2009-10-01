@@ -1,0 +1,38 @@
+AdditionalData: "datasetId=triggerImageprocEvent1.datasetId"
+AdditionalData: "visitId=triggerImageprocEvent1.visitId"
+AdditionalData: "exposureId=triggerImageprocEvent1.exposureId"
+AdditionalData: "ccdId=ccdId"
+AdditionalData: "ampId=ampId"
+OutputItems: {
+    rawCameraImage1: {
+        Type: "ImageF"
+        PythonType: "lsst.afw.image.ImageF"
+        StoragePolicy: {
+            Storage: "FitsStorage"
+            Location: "%(output)/raw/v%(visitId)-e%(exposureId)/c%03d(ccdId)-a%02d(ampId).fits"
+        }
+    }
+    rawImageMetadata1: {
+        Type: "PropertySet"
+        PythonType: "lsst.daf.base.PropertySet"
+#        StoragePolicy: {
+#            Storage: "XmlStorage"
+#            Location: "%(output)/raw/v%(visitId)-e%(exposureId)/c%03d(ccdId)-a%02d(ampId).xml"
+#        }
+        StoragePolicy: {
+            Storage: "DbStorage"
+            Location: "%(dbUrl)"
+        }
+    }
+}
+
+Persistence: {
+    Formatter: {
+        PropertySet: {
+            rawImageMetadata1: {
+                TableName: "Raw_Amp_Exposure"
+                KeyList: "rawAmpExposureId=ampExposureId" "rawCCDExposureId=ccdExposureId" "rawFPAExposureId=fpaExposureId" "ampId" "radecSys=RADECSYS" "url" "ctype1=CTYPE1" "ctype2=CTYPE2" "crpix1=CRPIX1" "crpix2=CRPIX2" "crval1=CRVAL1" "crval2=CRVAL2" "cd11=CD1_1" "cd21=CD2_1" "cd12=CD1_2" "cd22=CD2_2" "taiObs" "darkTime=DARKTIME"
+            }
+        }
+    }
+}

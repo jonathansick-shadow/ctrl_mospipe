@@ -1,0 +1,30 @@
+AdditionalData: "datasetId=triggerImageprocEvent1.datasetId"
+AdditionalData: "visitId=triggerImageprocEvent1.visitId"
+AdditionalData: "exposureId=triggerImageprocEvent1.exposureId"
+AdditionalData: "fpaExposureId=exposureMetadata1.fpaExposureId"
+AdditionalData: "ccdExposureId=exposureMetadata1.ccdExposureId"
+AdditionalData: "ampExposureId=exposureMetadata1.ampExposureId"
+AdditionalData: "filterId=exposureMetadata1.filterId"
+AdditionalData: "ccdId=ccdId"
+AdditionalData: "ampId=ampId"
+OutputItems: {
+    persistable_diaSourceSet1: {
+        Type: "PersistableDiaSourceVector"
+        PythonType: "lsst.afw.detection.PersistableDiaSourceVector"
+        StoragePolicy: {
+            Storage: "DbStorage"
+            Location: "%(dbUrl)"
+        }
+    }
+}
+
+Persistence: {
+    Formatter: {
+        PersistableDiaSourceVector: {
+            persistable_diaSourceSet1: {
+                templateTableName: "_tmpl_DIASource"
+                tableNamePattern: "_tmp_v%(visitId)_DIASource"
+            }
+        }
+    }
+}

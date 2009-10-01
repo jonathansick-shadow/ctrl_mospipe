@@ -1,0 +1,13 @@
+setupRequired(ctrl_orca >= 3.5)
+setupRequired(mops >= 3.2.5)
+setupRequired(meas_pipeline >= 3.0.5)
+setupRequired(ip_diffim >= 3.3.7)
+setupRequired(ip_isr >= 3.3.7)
+setupRequired(ap >= 3.1.1)
+setupRequired(afw >= 3.3.16)
+setupRequired(cat >= 3.3)
+
+envPrepend(PATH, ${PRODUCT_DIR}/bin)
+envPrepend(PORT_RANGE, "35001:35099")
+envPrepend(MPIEXEC_PORT_RANGE, "35001:35099")
+envPrepend(PYTHONPATH, ${PRODUCT_DIR}/python)

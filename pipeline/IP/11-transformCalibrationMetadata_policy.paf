@@ -1,0 +1,5 @@
+metadata: @dc3MetadataPolicy.paf
+datatype: @datatypePolicy/cfhtCalibrationTypePolicy.paf
+suffix: Keyword
+exposureKey: "biasExposure" "darkExposure" "flatExposure"
+ampBBoxKey: ampBBox

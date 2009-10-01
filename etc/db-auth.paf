@@ -1,0 +1,8 @@
+database: {
+    authInfo: {
+        host: lsst10.ncsa.uiuc.edu
+        port: 3306
+        user: mysqlUsername
+        password: mysqlPassword
+    }
+}

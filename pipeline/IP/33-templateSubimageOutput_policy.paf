@@ -1,0 +1,23 @@
+AdditionalData: "visitId=triggerImageprocEvent0.visitId"
+AdditionalData: "ccdId=ccdId"
+AdditionalData: "ampId=ampId"
+OutputItems: {
+    templateExposure: {
+        StoragePolicy: {
+            Storage: "FitsStorage"
+            Location: "%(output)/tmpl/v%(visitId)/v%(visitId)-c%03d(ccdId)-a%02d(ampId).tmpl"
+        }
+    }
+    templateWcs: {
+        StoragePolicy: {
+            Storage: "BoostStorage"
+            Location: "%(output)/tmpl/v%(visitId)/v%(visitId)-c%03d(ccdId)-a%02d(ampId).tmplwcs.boost"
+        }
+    }
+    templateBBoxProperties: {
+        StoragePolicy: {
+            Storage: "XmlStorage"
+            Location: "%(output)/tmpl/v%(visitId)/v%(visitId)-c%03d(ccdId)-a%02d(ampId).tmplbbox.xml"
+        }
+    }
+}

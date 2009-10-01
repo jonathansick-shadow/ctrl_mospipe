@@ -1,0 +1,38 @@
+RunMode: preprocess
+
+AdditionalData: "datasetId=triggerImageprocEvent0.datasetId"
+AdditionalData: "visitId=triggerImageprocEvent0.visitId"
+AdditionalData: "exposureId=triggerImageprocEvent0.exposureId"
+AdditionalData: "ccdId=ccdId"
+AdditionalData: "ampId=ampId"
+OutputItems: {
+    visit0: {
+        Type: "PropertySet"
+        PythonType: "lsst.daf.base.PropertySet"
+        StoragePolicy: {
+            Storage: "DbStorage"
+            Location: "%(dbUrl)"
+        }
+    }
+    fpaExposure0: {
+        Type: "PropertySet"
+        PythonType: "lsst.daf.base.PropertySet"
+        StoragePolicy: {
+            Storage: "DbStorage"
+            Location: "%(dbUrl)"
+        }
+    }
+}
+
+Persistence: {
+    Formatter: {
+        PropertySet: {
+            visit0: {
+                TableName: "Visit"
+            }
+            fpaExposure0: {
+                TableName: "Raw_FPA_Exposure"
+            }
+        }
+    }
+}
