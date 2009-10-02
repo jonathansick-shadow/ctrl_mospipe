@@ -10,9 +10,9 @@ from lsst.pex.exceptions import LsstException
 from lsst.daf.base import PropertySet
 import lsst.ctrl.events as events
 
-usage = """usage: %prog [-vqsd] [-V int] [-L lev] [-r dir] [-e script] [-C coll] [-m maxvisits] [-t cfht|sim] dc3pipe_policy_file runId [ visitListFile ... ]
+usage = """usage: %prog [-vqsd] [-V int] [-L lev] [-r dir] [-e script] [-C coll] [-m maxvisits] [-t cfht|sim] mospipe_policy_file runId [ visitListFile ... ]
 """
-desc = """Launch all or parts of the DC3a Alert Production according to a
+desc = """Launch all or parts of the mophot productin according to a
 given production policy file."""
 
 cl = optparse.OptionParser(usage=usage, description=desc)
@@ -46,8 +46,8 @@ cl.add_option("-t", "--data-type", action="store", default="cfht",
 cl.add_option("-C", "--collections", action="store", default=None, 
               dest="colls", help="a list of the datset collections names (support: D1|D2|D3|D4)")
 
-dc3apkg   = "ctrl_dc3pipe"
-pkgdirvar = dc3apkg.upper() + "_DIR"
+mospkg   = "ctrl_mospipe"
+pkgdirvar = mospkg.upper() + "_DIR"
 loggingEventTopic = events.EventLog.getLoggingTopic()
 waitLogName = "harness.pipeline.visit.stage.handleEvents.eventwait"
 setuptime = 3000    # seconds
@@ -60,9 +60,9 @@ datatypes['d3'] = datatypes['cfht']
 datatypes['d4'] = datatypes['cfht']
 
 def main():
-    "execute the launchDC3 script"
+    "execute the launchMospipe script"
 
-    logger = Log(Log.getDefaultLog(), "launchDC3")
+    logger = Log(Log.getDefaultLog(), "launchMos")
     try:
         (cl.opts, cl.args) = cl.parse_args()
         Log.getDefaultLog().setThreshold(-10 * cl.opts.verbosity)
@@ -83,7 +83,7 @@ def main():
         if cl.opts.colls is not None:
             colls = cl.opts.colls.split(',')
 
-        launchDC3a(cl.args[0], cl.args[1], cl.args[2:], colls, cl.opts, logger)
+        launchMos(cl.args[0], cl.args[1], cl.args[2:], colls, cl.opts, logger)
         
     except run.UsageError, e:
         print >> sys.stderr, "%s: %s" % (cl.get_prog_name(), e)
@@ -94,17 +94,18 @@ def main():
         sys.exit(2)
         
 
-def launchDC3a(policyFile, runid, visitFiles, colls, opts, logger):
+def launchMos(policyFile, runid, visitFiles, colls, opts, logger):
 
     if not os.environ.has_key(pkgdirvar):
         raise pexExcept.LsstException("%s env. var not set (setup %s)"
-                                      % (pkgdirvar, dc3apkg))
+                                      % (pkgdirvar, mospkg))
     if opts.repos is None:
         opts.repos = os.path.join(os.environ[pkgdirvar], "pipeline")
 
     policy = Policy.createPolicy(policyFile, opts.repos)
     broker = policy.get("eventBrokerHost")
     logger.log(Log.DEBUG, "Using event broker on %s" % broker)
+    print >> sys.stderr, "Using event broker on %s" % broker
 
     recvr = events.EventReceiver(broker, loggingEventTopic)
     

@@ -1,26 +1,28 @@
 file /home/tsa/LSSTDevel/Linux64/sconsUtils/3.3/python/lsst/SConsUtils.py,line 378:
 	Configure(confdir = .sconf_temp)
 scons: Configure: Checking if  CC is really gcc...
-gcc --help | grep gcc
-Usage: gcc [options] file...
-  -print-libgcc-file-name  Display the name of the compiler's companion library
-  -print-multi-directory   Display the root directory for versions of libgcc
-  -b <machine>             Run gcc for target <machine>, if installed
-  -V <version>             Run gcc version number <version>, if installed
- passed on to the various sub-processes invoked by gcc.  In order to pass
-<file:///usr/share/doc/gcc-4.3/README.Bugs>.
-scons: Configure: yes
+scons: Configure: ".sconf_temp/conftest_0" is up to date.
+scons: Configure: The original builder output was:
+  |gcc --help | grep gcc
+  |
+scons: Configure: (cached) yes
 
 
 file /home/tsa/LSSTDevel/Linux64/sconsUtils/3.3/python/lsst/SConsUtils.py,line 405:
 	Configure(confdir = .sconf_temp)
 scons: Configure: Checking for C++ header file tr1/unordered_map... 
-.sconf_temp/conftest_1.cpp <-
+scons: Configure: ".sconf_temp/conftest_1.cpp" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_1.cpp <-
+  |  |
+  |  |#include <tr1/unordered_map>
+  |  |
+  |  |
   |
-  |#include <tr1/unordered_map>
+scons: Configure: ".sconf_temp/conftest_1.o" is up to date.
+scons: Configure: The original builder output was:
+  |g++ -o .sconf_temp/conftest_1.o -c -g -Wall -O0 .sconf_temp/conftest_1.cpp
   |
-  |
-g++ -o .sconf_temp/conftest_1.o -c -g -Wall -O0 .sconf_temp/conftest_1.cpp
-scons: Configure: yes
+scons: Configure: (cached) yes
 
 

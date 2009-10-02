@@ -1,0 +1,23 @@
+#<?cfg paf policy ?>
+#
+# database server description:  MySQL on newfield
+#
+database: {
+    authInfo: {
+        host: localhost
+        port: 3306
+    }
+
+    globalSetup: {
+        globalDbName: pipelineDB
+        dcVersion: DC3a
+        dcDbName: mophot_DB
+        minPercDiskSpaceReq: 10   # measured in percentages
+        userRunLife: 2            # measured in weeks
+    }
+
+    runCleanup: {
+        daysFirstNotice: 7  # days when first notice is sent before run can be deleted
+        daysFinalNotice: 1  # days when final notice is sent before run can be deleted
+    }
+}

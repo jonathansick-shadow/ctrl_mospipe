@@ -1,2 +1,2 @@
-source /lsst/DC3/stacks/default/loadLSST.csh
-setup ctrl_dc3pipe
+source /home/tsa/LSSTDevel/loadLSST.csh
+setup ctrl_mospipe
