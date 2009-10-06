@@ -127,6 +127,7 @@ def runOrca(policyFile, runid, opts, logger):
         cmdopts += " -L %s" % opts.pipeverb
         
     cmd = "orca.py%s %s %s" % (cmdopts, policyFile, runid)
+    print >> sys.stderr, "Running orca: %s" % cmd
     try:
         sysexec(cmd, logger)
     except OSError, e:

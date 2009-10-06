@@ -65,7 +65,9 @@ deploy:  {
    # the default domain to assume for nodes listed below if a domain is 
    # not specified in the name
    #   
-   defaultDomain:  as.arizona.edu
+   # defaultDomain must be empty when running on the local machine
+
+   defaultDomain:  
 
    # the node names and the number of cores available to them
    # 
