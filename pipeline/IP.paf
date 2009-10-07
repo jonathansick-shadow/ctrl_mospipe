@@ -99,7 +99,7 @@ execute: {
    # Load input image
    appStage: {
       stageName: "lsst.pex.harness.IOStage.InputStage"
-      eventTopic: "triggerImageprocEvent0"
+      eventTopic: "triggerImageprocEvent"
       stagePolicy: @IP/03-imageInput_policy.paf
    }
    

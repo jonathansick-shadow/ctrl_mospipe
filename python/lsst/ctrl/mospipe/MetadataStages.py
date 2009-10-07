@@ -46,10 +46,20 @@ def transformMetadata(metadata, datatypePolicy, metadataPolicy, suffix):
                 metadata.set(paramName, val)
             else:
                 metadata.copy(paramName, metadata, keyword)
-#            metadata.copy(paramName, metadata, keyword)
+
+    # Copy used metadata to _original and remove used 
+
+    for paramName in paramNames:
+        # If it already exists don't copy and remove it
+        if metadata.exists(paramName):
+            continue
+        
+        mappingKey = paramName + suffix
+        if datatypePolicy.exists(mappingKey):
             metadata.copy(keyword + "_original", metadata, keyword)
             metadata.remove(keyword)
-    
+
+
     # Any additional operations on the input data?
     if datatypePolicy.exists('convertDateobsToTai'):
         if datatypePolicy.getBool('convertDateobsToTai'):
@@ -70,13 +80,19 @@ def transformMetadata(metadata, datatypePolicy, metadataPolicy, suffix):
     if datatypePolicy.exists('trimFilterName'):
         if datatypePolicy.getBool('trimFilterName'):
             filter = metadata.getString('filter')
-            filter = re.sub(r'\..*', '', filter)
+            filter = re.sub(r' .*', '', filter)
             metadata.setString('filter', filter)
 
     if datatypePolicy.exists('convertVisitIdToInt'):
         if datatypePolicy.getBool('convertVisitIdToInt'):
             visitId  = metadata.getString('visitId')
             metadata.setInt('visitId', int(visitId))
+
+    if datatypePolicy.exists('trimFileNameForExpID'):
+        if datatypePolicy.getBool('trimFileNameForExpID'):
+            exposureId  = metadata.getString('exposureId')
+            exposureId = re.sub(r'[a-zA-Z]+', '', exposureId)
+            metadata.setInt('exposureId', int(exposureId))
 
 
 class ValidateMetadataStage(Stage):

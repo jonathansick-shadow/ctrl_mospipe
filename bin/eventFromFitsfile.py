@@ -9,7 +9,7 @@ import lsst.pex.logging as pexLog
 import lsst.daf.base as dafBase
 import lsst.ctrl.events as ctrlEvents
 from lsst.pex.harness import run
-from lsst.ctrl.dc3pipe.MetadataStages import transformMetadata, validateMetadata
+from lsst.ctrl.mospipe.MetadataStages import transformMetadata, validateMetadata
 
 usage = """Usage: %prog [-dvqs] [-V lev] [-b host] [-t topic] FITSfile policyfile"""
 desc = """Send an incoming visit event to instruct the alert production to process
@@ -20,7 +20,7 @@ etc.) will require different policies.  See the
 $CTRL_DC3PIPE/pipeline/datatypePolicy directory for samples.  
 """
 
-logger = pexLog.Log(pexLog.Log.getDefaultLog(), "dc3pipe.eventFromFitsfile")
+logger = pexLog.Log(pexLog.Log.getDefaultLog(), "mospipe.eventFromFitsfile")
 exposureCount = 0
 VERB3 = run.verbosity2threshold("verb3", logger.INFO-3)
 
@@ -28,7 +28,7 @@ def defineCmdLine(usage=usage, description=desc):
     cl = optparse.OptionParser(usage=usage, description=description)
     run.addAllVerbosityOptions(cl, "V", "verb")
     cl.add_option("-b", "--broker", action="store", dest="broker",
-                  default="lsst4.ncsa.uiuc.edu", help="event broker host")
+                  default="newfield.as.arizona.edu", help="event broker host")
     cl.add_option("-t", "--topic", action="store", dest="topic",
                   default="triggerImageprocEvent", help="event topic name")
     cl.add_option("-M", "--metadata-policy", action="store", dest="mdpolicy",
@@ -48,8 +48,8 @@ def main(cmdline):
 
     mdPolicyFileName = cl.opts.mdpolicy
     if mdPolicyFileName is None:
-        mpf = pexPolicy.DefaultPolicyFile("ctrl_dc3pipe",
-                                          "dc3MetadataPolicy.paf",
+        mpf = pexPolicy.DefaultPolicyFile("ctrl_mospipe",
+                                          "mosMetadataPolicy.paf",
                                           "pipeline")
         metadataPolicy = pexPolicy.Policy.createPolicy(mpf,
                                                        mpf.getRepositoryPath())
@@ -67,7 +67,7 @@ def EventFromInputfile(inputfile,
                        datatypePolicy, 
                        metadataPolicy,
                        topicName='triggerImageprocEvent', 
-                       hostName='lsst4.ncsa.uiuc.edu'):
+                       hostName='newfield.as.arizona.edu'):
     """generate a new file event for a given FITS file
     @param inputfile       the name of the FITS file
     @param datatyepPolicy  the policy describing the metadata transformation
@@ -78,7 +78,7 @@ def EventFromInputfile(inputfile,
     global exposureCount
     exposureCount += 1
     
-    # For DC3a, inputfile is a .fits file on disk
+    # For mosphot, inputfile is a .fits file on disk
     metadata = afwImage.readMetadata(inputfile)
 
     # First, transform the input metdata
@@ -90,23 +90,17 @@ def EventFromInputfile(inputfile,
 
     # Create event policy, using defaults from input metadata
     event = dafBase.PropertySet()
-    event.copy('visitId',     metadata, 'visitId')
-    event.copy('ccdId',       metadata, 'ccdId')
-    event.copy('ampId',       metadata, 'ampId')
     event.copy('exposureId',  metadata, 'exposureId')
     event.copy('datasetId',   metadata, 'datasetId')
     event.copy('filter',      metadata, 'filter')
     event.copy('expTime',     metadata, 'expTime')
     event.copy('ra',          metadata, 'ra')
     event.copy('decl',        metadata, 'decl')
-    event.copy('equinox',     metadata, 'EQUINOX')
+    event.copy('equinox',     metadata, 'equinox')
     event.copy('airmass',     metadata, 'airmass')
     event.copy('dateObs',     metadata, 'dateObs')
 
-    if event.getInt('exposureId') == 0:
-        eventTransmitter = ctrlEvents.EventTransmitter(hostName, topicName+'0')
-    elif event.getInt('exposureId') == 1:
-        eventTransmitter = ctrlEvents.EventTransmitter(hostName, topicName+'1')
+    eventTransmitter = ctrlEvents.EventTransmitter(hostName, topicName)
 
     logger.log(logger.INFO,
                'Sending event for %s' % os.path.basename(inputfile))

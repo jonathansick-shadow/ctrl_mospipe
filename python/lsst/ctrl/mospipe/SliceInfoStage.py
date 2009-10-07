@@ -9,7 +9,6 @@ class SliceInfoStage(Stage):
 
     def __init__(self, stageId=-1, stagePolicy=None):
         Stage.__init__(self, stageId, stagePolicy)
-        self.ampBBoxDb = Policy(self._policy.get("ampBBoxDbPath"))
 
     def preprocess(self): 
         self.activeClipboard = self.inputQueue.getNextDataset()
@@ -38,11 +37,3 @@ class SliceInfoStage(Stage):
 
         clipboard.put("ccdId", ccdId)
         clipboard.put("ampId", ampId)
-        clipboard.put("ampBBox", self.lookupAmpBBox(ampId, ccdId))
-
-    def lookupAmpBBox(self, ampId, ccdId):
-        key = "CcdBBox.Amp%d" % ampId
-        p = self.ampBBoxDb.get(key)
-        return afwImage.BBox(
-                afwImage.PointI(p.get("x0"), p.get("y0")),
-                p.get("width"), p.get("height"))
