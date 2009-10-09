@@ -1,9 +1,10 @@
 # Setup for CTIO Mosaic2 in 8 readout mode
 # 
-nAmps: 1
+nAmps: 2
 nCcds: 8
 ccdIdFormula: "sliceId / nAmps"
 ampIdFormula: "sliceId % nAmps"
+hduIdFormula: "sliceId + 2"
 #
 # Probably unneeded...
 #

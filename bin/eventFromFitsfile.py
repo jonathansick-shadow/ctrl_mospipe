@@ -49,7 +49,7 @@ def main(cmdline):
     mdPolicyFileName = cl.opts.mdpolicy
     if mdPolicyFileName is None:
         mpf = pexPolicy.DefaultPolicyFile("ctrl_mospipe",
-                                          "mosMetadataPolicy.paf",
+                                          "mosEventMetadataPolicy.paf",
                                           "pipeline")
         metadataPolicy = pexPolicy.Policy.createPolicy(mpf,
                                                        mpf.getRepositoryPath())
@@ -80,6 +80,7 @@ def EventFromInputfile(inputfile,
     
     # For mosphot, inputfile is a .fits file on disk
     metadata = afwImage.readMetadata(inputfile)
+#    logger.log(logger.INFO,"Original metadata:\n" + metadata.toString())
 
     # First, transform the input metdata
     transformMetadata(metadata, datatypePolicy, metadataPolicy, 'Keyword')

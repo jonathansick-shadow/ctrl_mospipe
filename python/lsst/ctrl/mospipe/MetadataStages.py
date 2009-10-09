@@ -4,10 +4,12 @@ import re
 
 import lsst.afw.image as afwImage
 import lsst.daf.base as dafBase
+import lsst.pex.logging as pexLog
 
 from lsst.pex.harness.Stage import Stage
 
 propertySetTypeInfos = {}
+logger = pexLog.Log(pexLog.Log.getDefaultLog(), "mospipe.MetadataStages.py")
 
 def setTypeInfos():
     global propertySetTypeInfos
@@ -27,7 +29,9 @@ def validateMetadata(metadata, metadataPolicy):
     return True
 
 def transformMetadata(metadata, datatypePolicy, metadataPolicy, suffix):
+    logger.log(logger.INFO, metadata.toString())
     paramNames = metadataPolicy.paramNames(1)
+                    
     for paramName in paramNames:
         # If it already exists don't try and update it
         if metadata.exists(paramName):
@@ -74,8 +78,8 @@ def transformMetadata(metadata, datatypePolicy, metadataPolicy, suffix):
             dateObs += metadata.getDouble('expTime') * 0.5 / 3600. / 24.
             metadata.setDouble('dateObs', dateObs)
 
-    dateTime = dafBase.DateTime(metadata.getDouble('dateObs'))
-    metadata.setDateTime('taiObs', dateTime)
+    #dateTime = dafBase.DateTime(metadata.getDouble('dateObs'))
+    #metadata.setDateTime('taiObs', dateTime)
 
     if datatypePolicy.exists('trimFilterName'):
         if datatypePolicy.getBool('trimFilterName'):
@@ -151,14 +155,14 @@ class TransformMetadataStage(Stage):
 
         transformMetadata(metadata, datatypePolicy, metadataPolicy, suffix)
 
-        metadata.setLongLong('ampExposureId',
-                exposureMetadata.get('ampExposureId'))
-        metadata.setLongLong('ccdExposureId',
-                exposureMetadata.get('ccdExposureId'))
-        metadata.setLongLong('fpaExposureId',
-                exposureMetadata.get('fpaExposureId'))
-        metadata.set('url', metadata.get('filename'))
-        metadata.set('ampId', clipboard.get('ampId'))
+#        metadata.setLongLong('ampExposureId',
+#                exposureMetadata.get('ampExposureId'))
+#        metadata.setLongLong('ccdExposureId',
+#                exposureMetadata.get('ccdExposureId'))
+#        metadata.setLongLong('fpaExposureId',
+#                exposureMetadata.get('fpaExposureId'))
+#        metadata.set('url', metadata.get('filename'))
+#        metadata.set('ampId', clipboard.get('ampId'))
 
         clipboard.put(metadataKey, metadata)
         clipboard.put(imageKey, decoratedImage.getImage())

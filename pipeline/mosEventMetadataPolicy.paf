@@ -1,0 +1,18 @@
+#<?cfg paf policy ?>
+#
+# For mosphot, which uses MEF files as input, all input data must have 
+# these keywords (validated) and types (not validated)
+#
+# Information needed for event generation 
+#
+exposureId : int
+datasetId  : string
+filter     : string
+expTime    : float
+ra         : double
+decl       : double
+equinox    : double
+airmass    : double
+dateObs    : double
+filename   : string
+

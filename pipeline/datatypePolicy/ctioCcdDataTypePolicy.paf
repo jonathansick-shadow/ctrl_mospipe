@@ -1,0 +1,26 @@
+#<?cfg paf policy ?>
+
+# Policy configuration for CTIO Mosaic2 raw data at the individual ccd level
+# - ie for fits extensions other than the first
+
+
+###
+# NEEDED FOR EACH MEF EXTENSION PROCESSED BY A SLICE
+#
+
+# amplifier gain
+gainKeyword: GAIN
+
+# saturation level in ADU
+saturationKeyword: SATURATE
+
+# trim area
+trimsecKeyword: DATASEC
+
+# overscan area
+overscanKeyword: BIASSEC
+
+# ANY DATA CONVERSIONS BELOW
+
+
+

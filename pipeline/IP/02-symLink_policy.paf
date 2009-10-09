@@ -1,12 +1,12 @@
 RunMode: preprocess
 
 Links: {
-	sourcePath: /home/tsa/Precursor/Mosaic2/raw
+	sourcePath: /data/CTIO_Sep09/n1
 	destPath: %(input)/raw
 }
 
 Links: {
-	sourcePath: /home/tsa/Precursor/Mosaic2/calib
+	sourcePath: /data/CTIO_Sep09/calib
 	destPath: %(input)/calib
 }
 

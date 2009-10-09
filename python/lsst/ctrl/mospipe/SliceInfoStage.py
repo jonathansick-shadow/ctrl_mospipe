@@ -31,9 +31,13 @@ class SliceInfoStage(Stage):
 
         ccdFormula = self._policy.get("ccdIdFormula")
         ampFormula = self._policy.get("ampIdFormula")
+        hduFormula = self._policy.get("hduIdFormula")
+
 
         ccdId = eval(ccdFormula)
         ampId = eval(ampFormula)
+        hduId = eval(hduFormula)
 
         clipboard.put("ccdId", ccdId)
         clipboard.put("ampId", ampId)
+        clipboard.put("hduId", hduId)

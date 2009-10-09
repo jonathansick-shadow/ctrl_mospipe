@@ -20,7 +20,7 @@ filterKeyword: FILTER
 # Pointing Ra and Decl
 raKeyword: RA
 declKeyword: DEC
-equinoxKeyword: TELEQUIN
+equinoxKeyword: RADECEQ
 
 # Airmass of mid-exposure
 airmassKeyword: AIRMASS
@@ -31,6 +31,21 @@ datasetIdKeyword: OBJECT
 # Persisted name of file
 filenameKeyword: FILENAME
 
+###
+# NEEDED FOR EACH MEF EXTENSION PROCESSED BY A SLICE
+#
+
+# amplifier gain
+gainKeyword: GAIN
+
+# saturation level in ADU
+saturationKeyword: SATURATE
+
+# trim area
+trimsecKeyword: DATASEC
+
+# overscan area
+overscanKeyword: BIASSEC
 
 # ANY DATA CONVERSIONS BELOW
 
@@ -52,21 +67,3 @@ trimFilterName: true
 # Trim the file name of prefix and convert to int to get exposure id?
 trimFileNameForExpID: true
 
-####
-# FOR THE ISR
-
-# For all data
-#gainKeyword: GAIN
-#saturationKeyword: SATURATE
-#trimsecKeyword: DATASEC
-#overscanKeyword: BIASSEC
-
-# For calibration data
-# meancountsKeyword: IMMODE
-# darkscaleKeyword: EXPTIME
-# flatscaleKeyword: IMMODE
-# illumscaleKeyword: IMMODE
-
-# Not use in DC3a
-# fringeskyKeyword: FRNG_SKY
-# fringeampKeyword: FRNG_RNG

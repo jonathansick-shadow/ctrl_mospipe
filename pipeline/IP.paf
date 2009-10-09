@@ -103,46 +103,33 @@ execute: {
       stagePolicy: @IP/03-imageInput_policy.paf
    }
    
-#   # Transform input event into visit metadata (exposure 0)
-#   appStage: {
-#      stageName: "lsst.ctrl.mospipe.VisitMetadataStage.VisitMetadataStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/04-visitMetadata0_policy.paf
-#   }
-#   
-#   # Transform image metadata into LSST standard (exposure 0)
-#   appStage: {
-#      stageName: "lsst.ctrl.mospipe.MetadataStages.TransformMetadataStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/05-transformMetadata0_policy.paf
-#   }
-#   
-#   # Validate that metadata is in LSST standard form (exposure 0)
-#   appStage: {
-#      stageName: "lsst.ctrl.mospipe.MetadataStages.ValidateMetadataStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/06-validateMetadata0_policy.paf
-#   }
-#   
-#   # Persist the per-visit metadata (exposure 0)
+   
+   # Transform image metadata into LSST standard 
+   appStage: {
+      stageName: "lsst.ctrl.mospipe.MetadataStages.TransformMetadataStage"
+      eventTopic: "None"
+      stagePolicy: @IP/04-transformExposureMetadata_policy.paf
+   }
+   
+#   # Persist the per-exposure metadata
 #   appStage: {
 #      stageName: "lsst.pex.harness.IOStage.OutputStage"
 #      eventTopic: "None"
-#      stagePolicy: @IP/07-visitMetadataOutput0_policy.paf
+#      stagePolicy: @IP/05-exposureMetadataOutput_policy.paf
 #   }
 #
-#   # Persist the per-exposure metadata and the raw image (exposure 0)
-#   appStage: {
-#      stageName: "lsst.pex.harness.IOStage.OutputStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/08-rawImageAndMetadataOutput0_policy.paf
-#   }
+   # Persist the per-exposure metadata and the raw image (exposure 0)
+   appStage: {
+      stageName: "lsst.pex.harness.IOStage.OutputStage"
+      eventTopic: "None"
+      stagePolicy: @IP/06-rawImageAndMetadataOutput_policy.paf
+   }
 #   
 #   # Determine which calibration data products to load
 #   appStage: {
 #      stageName: "lsst.ip.isr.IdentifyCalibrationProductsStage.IdentifyCalibrationProductsStage"
 #      eventTopic: "None"
-#      stagePolicy: @IP/09-identifyCalibrationProducts_policy.paf
+#      stagePolicy: @IP/07-identifyCalibrationProducts_policy.paf
 #   }
 #   
 #   # Load the calibration data products

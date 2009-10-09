@@ -1,0 +1,7 @@
+metadata: @mosExposureMetadataPolicy.paf
+datatype: @datatypePolicy/ctioCcdDataTypePolicy.paf
+suffix: Keyword
+imageKey: rawCameraImage
+metadataKey: rawImageMetadata
+exposureMetadataKey: exposureMetadata
+computeWcsGuess: false

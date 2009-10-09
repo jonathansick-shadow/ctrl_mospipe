@@ -71,6 +71,6 @@ deploy:  {
 
    # the node names and the number of cores available to them
    # 
-   nodes:  "newfield:4"
+   nodes:  "newfield:8"
 
 }
