@@ -197,3 +197,32 @@ class TransformExposureMetadataStage(Stage):
             exposure.getMaskedImage().setXY0(ampBBox.getLLC())
 
         self.outputQueue.addDataset(clipboard)
+
+class TransformCalibrationImageStage(Stage):
+
+    """This stage takes a list of input DecoratedImages and transforms them into Exposures
+    for use by ISR. """
+
+    def process(self):
+        clipboard = self.inputQueue.getNextDataset()
+        metadataPolicy = self._policy.getPolicy("metadata")
+        datatypePolicy = self._policy.getPolicy("datatype")
+        imageKeys = self._policy.getStringArray("calibImageKey")
+
+        if self._policy.exists("suffix"):
+            suffix = self._policy.get("suffix")
+        else:
+            suffix = "Keyword"
+
+        for imageKey in imageKeys:
+            exposureKey = re.sub(r'Image','Exposure', imageKey)
+            dImage = clipboard.get(imageKey)
+            mask = afwImage.MaskU(dImage.getDimensions())
+            var = afwImage.ImageF(dImage.getDimensions())
+            maskedImage = afwImage.makeMaskedImage(dImage.getImage(), mask, var)
+            metadata = dImage.getMetadata()
+            exposure = afwImage.makeExposure(maskedImage)
+            exposure.setMetadata(metadata)
+            clipboard.put(exposureKey, exposure)
+            
+        self.outputQueue.addDataset(clipboard)

@@ -1,4 +1,0 @@
-AdditionalData: "datasetId=triggerImageprocEvent0.datasetId"
-AdditionalData: "filter=triggerImageprocEvent0.filter"
-templateLocation: "%(input)/template/%(datasetId)/25/%(filter)/T0004_%(datasetId)_25_%(filter)_img.fits"
-outputKey: "templateDimensions"

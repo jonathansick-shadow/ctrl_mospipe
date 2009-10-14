@@ -8,7 +8,7 @@ OutputItems: {
         PythonType: "lsst.afw.image.ImageF"
         StoragePolicy: {
             Storage: "FitsStorage"
-            Location: "%(output)/raw/e%(exposureId)/c%03d(ccdId)-a%02d(ampId).fits"
+            Location: "%(output)/raw/obj%(exposureId)/c%03d(ccdId)-a%02d(ampId).fits"
         }
     }
 #    rawImageMetadata0: {

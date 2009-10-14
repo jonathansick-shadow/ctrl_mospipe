@@ -111,14 +111,14 @@ execute: {
       stagePolicy: @IP/04-transformExposureMetadata_policy.paf
    }
    
-#   # Persist the per-exposure metadata
+#   # Persist the per-exposure metadata to the database
 #   appStage: {
 #      stageName: "lsst.pex.harness.IOStage.OutputStage"
 #      eventTopic: "None"
 #      stagePolicy: @IP/05-exposureMetadataOutput_policy.paf
 #   }
 #
-   # Persist the per-exposure metadata and the raw image (exposure 0)
+   # Persist the per-exposure metadata and the raw image
    appStage: {
       stageName: "lsst.pex.harness.IOStage.OutputStage"
       eventTopic: "None"
@@ -132,137 +132,89 @@ execute: {
 #      stagePolicy: @IP/07-identifyCalibrationProducts_policy.paf
 #   }
 #   
-#   # Load the calibration data products
-#   appStage: {
-#      stageName: "lsst.pex.harness.IOStage.InputStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/10-calibrationInput_policy.paf
-#   }
+   # Load the calibration data products
+   appStage: {
+      stageName: "lsst.pex.harness.IOStage.InputStage"
+      eventTopic: "None"
+      stagePolicy: @IP/08-calibrationInput_policy.paf
+   }
+   
+   # Transform calibration images taken from MEF into Exposures for use by ISR
+   appStage: {
+      stageName: "lsst.ctrl.mospipe.MetadataStages.TransformCalibrationImageStage"
+      eventTopic: "None"
+     stagePolicy: @IP/09-transformCalibrationMetadata_policy.paf
+   }
+
+   # Perform ISR
+   appStage: {
+      stageName: "lsst.ip.isr.IsrStage"
+      eventTopic: "None"
+      stagePolicy: @IP/10-isr_policy.paf
+   }
 #   
-#   # Transform calibration exposure metadata into LSST standard (exposure 0)
-#   appStage: {
-#      stageName: "lsst.ctrl.mospipe.MetadataStages.TransformExposureMetadataStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/11-transformCalibrationMetadata_policy.paf
-#   }
-#
-#   # Perform ISR (exposure 0)
-#   appStage: {
-#      stageName: "lsst.ip.isr.IsrStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/12-isr0_policy.paf
-#   }
-#   
-#   # Detect sources for WCS (exposure 0)
+#   # Detect sources for WCS
 #   appStage: {
 #      stageName: "lsst.meas.pipeline.SourceDetectionStage"
 #      eventTopic: "None"
-#      stagePolicy: @IP/13-sourceDetection_policy.paf
+#      stagePolicy: @IP/11-sourceDetection_policy.paf
 #   }
 #   
-#   # Persist calibrated and background-subtracted exposures (exposure 0)
-#   appStage: {
-#      stageName: "lsst.pex.harness.IOStage.OutputStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/14-calibAndBkgdExposureOutput_policy.paf
-#   }
+   # Persist calibrated and background-subtracted exposures
+   appStage: {
+      stageName: "lsst.pex.harness.IOStage.OutputStage"
+      eventTopic: "None"
+      stagePolicy: @IP/12-calibAndBkgdExposureOutput_policy.paf
+   }
 #
 #   # Measure sources for WCS (exposure 0)
 #   appStage: {
 #      stageName: "lsst.meas.pipeline.SourceMeasurementStage"
 #      eventTopic: "None"
-#      stagePolicy: @IP/15-sourceMeasurement_policy.paf
+#      stagePolicy: @IP/13-sourceMeasurement_policy.paf
 #   }
 #   
-#   # Persist sources (exposure 0)
+#   # Persist sources
 #   appStage: {
 #      stageName: "lsst.pex.harness.IOStage.OutputStage"
 #      eventTopic: "None"
-#      stagePolicy: @IP/16-exposureAndWcsSourcesOutput_policy.paf
+#      stagePolicy: @IP/14-exposureAndWcsSourcesOutput_policy.paf
 #   }
 #
 #   # Determine PSF (exposure 0)
 #   appStage: {
 #      stageName: "lsst.meas.pipeline.PsfDeterminationStage"
 #      eventTopic: "None"
-#      stagePolicy: @IP/17-psfDetermination_policy.paf
+#      stagePolicy: @IP/15-psfDetermination_policy.paf
 #   }
 #   
-#   # Persist PSF (exposure 0)
+#   # Persist PSF 
 #   appStage: {
 #      stageName: "lsst.pex.harness.IOStage.OutputStage"
 #      eventTopic: "None"
-#      stagePolicy: @IP/18-psfOutput_policy.paf
+#      stagePolicy: @IP/16-psfOutput_policy.paf
 #   }
 #   
-#   # Load input image (exposure 1)
-#   appStage: {
-#      stageName: "lsst.pex.harness.IOStage.InputStage"
-#      eventTopic: "triggerImageprocEvent1"
-#      stagePolicy: @IP/19-imageInput1_policy.paf
-#   }
-#   
-#   # Transform input event into visit metadata (exposure 1)
-#   appStage: {
-#      stageName: "lsst.ctrl.mospipe.VisitMetadataStage.VisitMetadataStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/20-visitMetadata1_policy.paf
-#   }
-#   
-#   # Transform image metadata into LSST standard (exposure 1)
-#   appStage: {
-#      stageName: "lsst.ctrl.mospipe.MetadataStages.TransformMetadataStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/21-transformMetadata1_policy.paf
-#   }
-#   
-#   # Validate that metadata is in LSST standard form (exposure 1)
-#   appStage: {
-#      stageName: "lsst.ctrl.mospipe.MetadataStages.ValidateMetadataStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/22-validateMetadata1_policy.paf
-#   }
-#   
-#   # Persist the per-visit metadata (exposure 1)
-#   appStage: {
-#      stageName: "lsst.pex.harness.IOStage.OutputStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/23-visitMetadataOutput1_policy.paf
-#   }
-#
-#   # Persist the per-exposure metadata and the raw image (exposure 1)
-#   appStage: {
-#      stageName: "lsst.pex.harness.IOStage.OutputStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/24-rawImageAndMetadataOutput1_policy.paf
-#   }
-#   
-#   # Perform ISR (exposure 1)
-#   appStage: {
-#      stageName: "lsst.ip.isr.IsrStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/25-isr1_policy.paf
-#   }
 #   
 #   # Load WCS sources from entire CCD
 #   appStage: {
 #      stageName: "lsst.pex.harness.IOStage.InputStage"
 #      eventTopic: "None"
-#      stagePolicy: @IP/26-wcsSourcesInput_policy.paf
+#      stagePolicy: @IP/17-wcsSourcesInput_policy.paf
 #   }
 #   
 #   # Determine WCS based on CCD's WCS sources
 #   appStage: {
 #      stageName: "lsst.meas.pipeline.WcsDeterminationStage"
 #      eventTopic: "None"
-#      stagePolicy: @IP/27-wcsDetermination_policy.paf
+#      stagePolicy: @IP/18-wcsDetermination_policy.paf
 #   }
 #   
 #   # Persist calibrated science exposures
 #   appStage: {
 #      stageName: "lsst.pex.harness.IOStage.OutputStage"
 #      eventTopic: "None"
-#      stagePolicy: @IP/28-calibratedExposuresOutput_policy.paf
+#      stagePolicy: @IP/19-calibratedExposuresOutput_policy.paf
 #   }
 #   
 #   # Compute CCD-level metadata (no stage policy)
@@ -271,122 +223,27 @@ execute: {
 #      eventTopic: "None"
 #   }
 #
-#   # Load WCS from template image
-#   appStage: {
-#      stageName: "lsst.pex.harness.IOStage.InputStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/29-templateMetadataInput_policy.paf
-#   }
-#   
-#   # Load dimensions from template image (hack for DC3a)
-#   appStage: {
-#      stageName: "lsst.ctrl.mospipe.TemplateDimensionStage.TemplateDimensionStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/30-templateDimension_policy.paf
-#   }
-#
-#   # Determine bounding box of exposures within template image
-#   appStage: {
-#      stageName: "lsst.ip.diffim.pipeline.TemplateBBoxStage.TemplateBBoxStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/31-templateBBox_policy.paf
-#   }
-#   
-#   # Load subimage of template corresponding to exposure
-#   appStage: {
-#      stageName: "lsst.pex.harness.IOStage.InputStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/32-templateSubimageInput_policy.paf
-#   }
-#   
-#   # Persist template subimage with bounding box and WCS information
-#   appStage: {
-#      stageName: "lsst.pex.harness.IOStage.OutputStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/33-templateSubimageOutput_policy.paf
-#   }
-#
-#   # Subtract template from exposure (exposure 0)
-#   appStage: {
-#      stageName: "lsst.ip.diffim.diffimStages.DiffimStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/34-imageDifference0_policy.paf
-#   }
-#   
-#   # Subtract template from exposure (exposure 1)
-#   appStage: {
-#      stageName: "lsst.ip.diffim.diffimStages.DiffimStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/35-imageDifference1_policy.paf
-#   }
-#   
-#   # Persist difference images and kernels
-#   appStage: {
-#      stageName: "lsst.pex.harness.IOStage.OutputStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/36-differenceImageOutput_policy.paf
-#   }
-#   
-#   # Co-add difference images and detect DIASources
-#   appStage: {
-#      stageName: "lsst.meas.pipeline.AddAndDetectStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/37-addAndDetect_policy.paf
-#   }
-#   
-#   # Measure DIASources in both exposures
+#   # Measure Sources
 #   appStage: {
 #      stageName: "lsst.meas.pipeline.SourceMeasurementStage"
 #      eventTopic: "None"
-#      stagePolicy: @IP/38-diaSourceMeasurement_policy.paf
+#      stagePolicy: @IP/20-diaSourceMeasurement_policy.paf
 #   }
 #
-#   # Convert the Sources to Dia sources
-#   appStage: {
-#      stageName: "lsst.meas.pipeline.SourceToDiaSourceStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/39-sourceToDiaSource_policy.paf
-#   }
-#
-#   # Classify DIASources
-#   appStage: {
-#      stageName: "lsst.meas.pipeline.SourceClassificationStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/40-sourceClassification_policy.paf
-#   }
-#   
-#   # Persist DIASources (exposure 0)
+#   # Persist Sources
 #   appStage: {
 #      stageName: "lsst.pex.harness.IOStage.OutputStage"
 #      eventTopic: "None"
-#      stagePolicy: @IP/41-diaSourceOutput0_policy.paf
+#      stagePolicy: @IP/21-diaSourceOutput_policy.paf
 #   }
 #
-#   # Persist DIASources (exposure 1)
-#   appStage: {
-#      stageName: "lsst.pex.harness.IOStage.OutputStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/42-diaSourceOutput1_policy.paf
-#   }
 #   
 #   # Send an event to the association pipeline indicating that
 #   # new detections are available
 #   appStage: {
 #      stageName: "lsst.pex.harness.EventStage.EventStage"
 #      eventTopic: "None"
-#      stagePolicy: @IP/43-associationEvent_policy.paf
+#      stagePolicy: @IP/22-associationEvent_policy.paf
 #   }
 #
-#   # Persist SDQA ratings
-#   appStage: {
-#      stageName: "lsst.pex.harness.IOStage.OutputStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/44-sdqaOutput0_policy.paf
-#   }
-#   appStage: {
-#      stageName: "lsst.pex.harness.IOStage.OutputStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/45-sdqaOutput1_policy.paf
-#   }
-#   
 }

@@ -6,7 +6,7 @@ Links: {
 }
 
 Links: {
-	sourcePath: /data/CTIO_Sep09/calib
+	sourcePath: /data/CTIO_Sep09/n1/calib
 	destPath: %(input)/calib
 }
 

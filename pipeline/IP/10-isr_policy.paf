@@ -1,0 +1,6 @@
+inputImageKey: rawCameraImage
+inputMetadataKey: rawImageMetadata
+calibDataKey: calibData
+calibratedExposureKey: calibratedExposure
+
+isrPolicy: @IP/isrPolicy.paf

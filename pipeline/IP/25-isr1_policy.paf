@@ -1,7 +1,0 @@
-inputImageKey: rawCameraImage1
-inputMetadataKey: rawImageMetadata1
-calibDataKey: calibData
-calibratedExposureKey: calibratedExposure1
-sdqaRatingSetKey: isrRatingSet1
-
-isrPolicy: @IPSD/isrPolicy.paf

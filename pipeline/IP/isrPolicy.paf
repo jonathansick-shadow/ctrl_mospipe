@@ -14,7 +14,7 @@
 debugIO: false
 
 # Does a Bad Pixel Mask exist? (boolean)
-bpm: true
+bpm: false
 
 # Size of Chunk (FPA, RAFT, CCD, AMP, OTHER)
 chunkType: AMP
@@ -32,27 +32,21 @@ filenameKeyword: FILENAME
 # gain of detector
 defaultGainKeyword: 'GAIN'
 
+
 ########################################
-# CALIBRATION IDENTIFICATION STAGE POLICY
+# WHICH SUBSTAGES TO TURN ON
 
-calibrationIdentificationPolicy: {
-
- # Start date for cal data; of the form 2004/03/12
- startDateKeyword: TVSTART
- 
- # Stop date for cal data
- stopDateKeyword: TVSTOP
-
- # Data date
- dataDateKeyword: DATE-OBS
-
- # Filter keyword
- filterKeyword: FILTER
-
- # Dark keyword
- darkKeyword: DARKTIME
-
-}
+linearize: false
+saturationCorrection: true
+overscanCorrection: true
+trim: true
+biasCorrection: true
+darkCorrection: false
+flatCorrection: true
+fringeCorrection: false
+maskBadPixels: false
+cosmicRayCorrection: false
+crossTalkCorrection: false
 
 
 ########################################

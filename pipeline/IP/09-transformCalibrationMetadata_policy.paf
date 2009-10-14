@@ -1,0 +1,4 @@
+metadata: @mosExposureMetadataPolicy.paf
+datatype: @datatypePolicy/ctioCcdDataTypePolicy.paf
+suffix: Keyword
+calibImageKey: "biasImage" "flatImage"
