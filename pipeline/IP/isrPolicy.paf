@@ -45,7 +45,7 @@ darkCorrection: false
 flatCorrection: true
 fringeCorrection: false
 maskBadPixels: false
-cosmicRayCorrection: false
+cosmicRayCorrection: true
 crossTalkCorrection: false
 
 
@@ -96,8 +96,10 @@ crRejectionPolicy: {
 
 trimPolicy: {
 
- # Metadata keyword containing Trim section
+ # Metadata keywords containing Trim section and
+ # Data section, which needs to be fixed after trim
  trimsecKeyword: TRIMSEC
+ datasecKeyword: DATASEC
 
 }
 
