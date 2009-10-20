@@ -67,3 +67,8 @@ trimFilterName: true
 # Trim the file name of prefix and convert to int to get exposure id?
 trimFileNameForExpID: true
 
+# Convert RA to double radians from hh:mm:ss string?
+convertRaToRadians: true
+
+# Convert Dec to double radians from dd:mm:ss string?
+convertDecToRadians: true

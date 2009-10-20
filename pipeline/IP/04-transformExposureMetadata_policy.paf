@@ -4,4 +4,5 @@ suffix: Keyword
 imageKey: rawCameraImage
 metadataKey: rawImageMetadata
 exposureMetadataKey: exposureMetadata
+eventName: triggerImageprocEvent
 computeWcsGuess: false

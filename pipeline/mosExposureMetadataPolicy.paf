@@ -10,8 +10,8 @@
 #datasetId  : string
 filter     : string
 expTime    : float
-#ra         : double
-#decl       : double
+ra         : double
+decl       : double
 #equinox    : double
 #airmass    : double
 dateObs    : double

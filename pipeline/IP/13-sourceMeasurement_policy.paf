@@ -9,10 +9,9 @@ measureObjects: {
     apRadius: 3.0
 }
 data: {
-    exposureKey: "backgroundSubtractedExposure0"
+    exposureKey: "backgroundSubtractedExposure"
     psfKey: "smoothingPsfModel"
-    outputKey: "sourceSet0"
+    outputKey: "sourceSet"
 }
 positiveDetectionKey: "positiveFootprintSet"
-negativeDetectionKey: "negativeFootprintSet"
 

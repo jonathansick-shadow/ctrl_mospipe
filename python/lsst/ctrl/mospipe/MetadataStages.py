@@ -5,6 +5,7 @@ import re
 import lsst.afw.image as afwImage
 import lsst.daf.base as dafBase
 import lsst.pex.logging as pexLog
+import lsst.utils as lsstutils
 
 from lsst.pex.harness.Stage import Stage
 
@@ -99,6 +100,18 @@ def transformMetadata(metadata, datatypePolicy, metadataPolicy, suffix):
             metadata.setInt('exposureId', int(exposureId))
 
 
+    if datatypePolicy.exists('convertRaToRadians'):
+        if datatypePolicy.getBool('convertRaToRadians'):
+            raStr  = metadata.getString('ra')
+            metadata.setDouble('ra', lsstutils.raStrToRad(raStr))
+
+    if datatypePolicy.exists('convertDecToRadians'):
+        if datatypePolicy.getBool('convertDecToRadians'):
+            decStr  = metadata.getString('decl')
+            metadata.setDouble('decl', lsstutils.decStrToRad(raStr))
+
+
+
 class ValidateMetadataStage(Stage):
 
     """Validates that every field in metadataPolicy exists in the
@@ -134,10 +147,8 @@ class TransformMetadataStage(Stage):
         datatypePolicy = self._policy.getPolicy("datatype")
         imageKey = self._policy.get("imageKey")
         metadataKey = self._policy.get("metadataKey")
-        exposureMetadataKey = self._policy.get("exposureMetadataKey")
         wcsKey = self._policy.get("wcsKey")
         decoratedImage = clipboard.get(imageKey)
-        exposureMetadata = clipboard.get(exposureMetadataKey)
         metadata = decoratedImage.getMetadata()
 
         if self._policy.exists("suffix"):
@@ -153,16 +164,29 @@ class TransformMetadataStage(Stage):
                 wcs.shiftReferencePixel(ampBBox.getX0(), ampBBox.getY0())
                 clipboard.put(wcsKey, wcs)
 
+        
+        # set various exposure id's needed by downstream stages
+
+        ccdId = clipboard.get("ccdId")
+        ampId = clipboard.get("ampId")
+
+        eventName = self._policy.get("eventName")
+        event = clipboard.get(eventName)
+        exposureId = event.get("exposureId")
+
+        fpaExposureId = exposureId
+        ccdExposureId = (fpaExposureId << 8) + ccdId
+        ampExposureId = (ccdExposureId << 6) + ampId
+
+        metadata.setLongLong('ampExposureId', ampExposureId)
+        metadata.setLongLong('ccdExposureId',ccdExposureId)
+        metadata.setLongLong('fpaExposureId',fpaExposureId)
+        metadata.set('ampId', ampId)
+        metadata.set('ccdId', ampId)
+#        metadata.set('url', metadata.get('filename'))   # who uses this??
+
         transformMetadata(metadata, datatypePolicy, metadataPolicy, suffix)
 
-#        metadata.setLongLong('ampExposureId',
-#                exposureMetadata.get('ampExposureId'))
-#        metadata.setLongLong('ccdExposureId',
-#                exposureMetadata.get('ccdExposureId'))
-#        metadata.setLongLong('fpaExposureId',
-#                exposureMetadata.get('fpaExposureId'))
-#        metadata.set('url', metadata.get('filename'))
-#        metadata.set('ampId', clipboard.get('ampId'))
 
         clipboard.put(metadataKey, metadata)
         clipboard.put(imageKey, decoratedImage.getImage())
@@ -195,7 +219,7 @@ class TransformExposureMetadataStage(Stage):
             metadata = exposure.getMetadata()
             transformMetadata(metadata, datatypePolicy, metadataPolicy, suffix)
             exposure.getMaskedImage().setXY0(ampBBox.getLLC())
-
+            logger.log(logger.INFO,"Setting XY0 to %f, %f" % (ampBBox.getX0, ampBBox.getY0))
         self.outputQueue.addDataset(clipboard)
 
 class TransformCalibrationImageStage(Stage):

@@ -45,7 +45,7 @@ darkCorrection: false
 flatCorrection: true
 fringeCorrection: false
 maskBadPixels: false
-cosmicRayCorrection: true
+cosmicRayCorrection: false
 crossTalkCorrection: false
 
 

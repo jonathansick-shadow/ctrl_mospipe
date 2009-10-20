@@ -153,12 +153,12 @@ execute: {
       stagePolicy: @IP/10-isr_policy.paf
    }
 #   
-#   # Detect sources for WCS
-#   appStage: {
-#      stageName: "lsst.meas.pipeline.SourceDetectionStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/11-sourceDetection_policy.paf
-#   }
+   # Detect sources for WCS
+   appStage: {
+      stageName: "lsst.meas.pipeline.SourceDetectionStage"
+      eventTopic: "None"
+      stagePolicy: @IP/11-sourceDetection_policy.paf
+   }
 #   
    # Persist calibrated and background-subtracted exposures
    appStage: {
@@ -167,19 +167,19 @@ execute: {
       stagePolicy: @IP/12-calibAndBkgdExposureOutput_policy.paf
    }
 #
-#   # Measure sources for WCS (exposure 0)
-#   appStage: {
-#      stageName: "lsst.meas.pipeline.SourceMeasurementStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/13-sourceMeasurement_policy.paf
-#   }
+   # Measure sources for WCS
+   appStage: {
+      stageName: "lsst.meas.pipeline.SourceMeasurementStage"
+      eventTopic: "None"
+      stagePolicy: @IP/13-sourceMeasurement_policy.paf
+   }
 #   
-#   # Persist sources
-#   appStage: {
-#      stageName: "lsst.pex.harness.IOStage.OutputStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/14-exposureAndWcsSourcesOutput_policy.paf
-#   }
+   # Persist sources
+   appStage: {
+      stageName: "lsst.pex.harness.IOStage.OutputStage"
+      eventTopic: "None"
+      stagePolicy: @IP/14-exposureAndWcsSourcesOutput_policy.paf
+   }
 #
 #   # Determine PSF (exposure 0)
 #   appStage: {
