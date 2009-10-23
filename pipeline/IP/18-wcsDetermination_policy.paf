@@ -4,7 +4,7 @@
 # Is this one crudely coadded image or one or both exposures of the visit?
 # For now we decided to only detect on the first exposure of the visit.
 #
-exposureKeyList: "calibratedExposure0" "calibratedExposure1"
+exposureKeyList: "calibratedExposure"
 sourceSetKey: "ccdWcsSources"
 ampBBoxKey: "ampBBox"
 outputCcdWcsKey: "ccdWcs"
@@ -24,4 +24,4 @@ brightestNStars : 45
 # Range of allowed fit pixel scale = [input scale/pixelScaleRangeFactor, input scale * pixelScaleRangeFactor]
 # must be >= 1.0; defaults to 1.1
 pixelScaleRangeFactor: 2.0
-ccdDimensions: @datatypePolicy/cfhtCcdDimensionsPolicy.paf
+ccdDimensions: @datatypePolicy/ctioCcdDimensionsPolicy.paf

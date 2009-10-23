@@ -181,34 +181,34 @@ execute: {
       stagePolicy: @IP/14-exposureAndWcsSourcesOutput_policy.paf
    }
 #
-#   # Determine PSF (exposure 0)
-#   appStage: {
-#      stageName: "lsst.meas.pipeline.PsfDeterminationStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/15-psfDetermination_policy.paf
-#   }
+   # Determine PSF
+   appStage: {
+      stageName: "lsst.meas.pipeline.PsfDeterminationStage"
+      eventTopic: "None"
+      stagePolicy: @IP/15-psfDetermination_policy.paf
+   }
 #   
-#   # Persist PSF 
-#   appStage: {
-#      stageName: "lsst.pex.harness.IOStage.OutputStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/16-psfOutput_policy.paf
-#   }
+   # Persist PSF 
+   appStage: {
+      stageName: "lsst.pex.harness.IOStage.OutputStage"
+      eventTopic: "None"
+      stagePolicy: @IP/16-psfOutput_policy.paf
+   }
 #   
 #   
-#   # Load WCS sources from entire CCD
-#   appStage: {
-#      stageName: "lsst.pex.harness.IOStage.InputStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/17-wcsSourcesInput_policy.paf
-#   }
-#   
-#   # Determine WCS based on CCD's WCS sources
-#   appStage: {
-#      stageName: "lsst.meas.pipeline.WcsDeterminationStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/18-wcsDetermination_policy.paf
-#   }
+   # Load WCS sources from entire CCD
+   appStage: {
+      stageName: "lsst.pex.harness.IOStage.InputStage"
+      eventTopic: "None"
+      stagePolicy: @IP/17-wcsSourcesInput_policy.paf
+   }
+   
+   # Determine WCS based on CCD's WCS sources
+   appStage: {
+      stageName: "lsst.meas.pipeline.WcsDeterminationStage"
+      eventTopic: "None"
+      stagePolicy: @IP/18-wcsDetermination_policy.paf
+   }
 #   
 #   # Persist calibrated science exposures
 #   appStage: {

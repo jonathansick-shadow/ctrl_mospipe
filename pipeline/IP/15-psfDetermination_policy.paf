@@ -3,10 +3,10 @@
 # Stage policy for PsfDetermination Stage
 
 data: {
-    exposureKey: "backgroundSubtractedExposure0"
-    sourceSetKey: "sourceSet0"
+    exposureKey: "backgroundSubtractedExposure"
+    sourceSetKey: "sourceSet"
     outputPsfKey: "psfModel"
-    outputCellSetKey: "psfCellSet0"
+    outputCellSetKey: "psfCellSet"
 }
 fluxLim: 5.0e3
 sizeCellX: 512
@@ -18,6 +18,6 @@ spatialOrder: 0
 nStarPerCellSpatialFit: 5
 tolerance: 0.1
 reducedChi2ForPsfCandidates: 2.0
-nIterForPsf: 3
+nIterForPsf: 1
 
 PsfDeterminationSdqaKey: "psfDeterminationRatingSet"

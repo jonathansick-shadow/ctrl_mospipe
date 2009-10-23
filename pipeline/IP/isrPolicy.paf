@@ -32,6 +32,8 @@ filenameKeyword: FILENAME
 # gain of detector
 defaultGainKeyword: 'GAIN'
 
+# string that defines amp's location within ccd
+ampBBoxKey: 'ampBBox'
 
 ########################################
 # WHICH SUBSTAGES TO TURN ON
@@ -48,6 +50,13 @@ maskBadPixels: false
 cosmicRayCorrection: false
 crossTalkCorrection: false
 
+########################################
+# CREATE EXPOSURE STAGE POLICY	
+	
+exposurePolicy: {
+  ampBBoxKeyword: CCDSEC
+  gainKeyword: GAIN
+}
 
 ########################################
 # SATURATION CORRECTION STAGE POLICY	
@@ -72,7 +81,7 @@ crRejectionPolicy: {
 
  # e_per_dn:    1.0    
  # gain of detector
- gainKeyword: 'GAIN'
+ gainKeyword: GAIN
 
  # CRs must be > this many sky-sig above sky
  min_sigma:   6.0    
