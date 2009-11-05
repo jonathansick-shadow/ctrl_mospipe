@@ -20,7 +20,7 @@ filterKeyword: FILTER
 # Pointing Ra and Decl
 raKeyword: RA
 declKeyword: DEC
-equinoxKeyword: RADECEQ
+equinoxKeyword: EQUINOX
 
 # Airmass of mid-exposure
 airmassKeyword: AIRMASS
@@ -42,10 +42,10 @@ gainKeyword: GAIN
 saturationKeyword: SATURATE
 
 # trim area
-trimsecKeyword: DATASEC
+#trimsecKeyword: DATASEC
 
 # overscan area
-overscanKeyword: BIASSEC
+#overscanKeyword: BSECA
 
 # ANY DATA CONVERSIONS BELOW
 
@@ -72,6 +72,3 @@ convertRaToRadians: true
 
 # Convert Dec to double radians from dd:mm:ss string?
 convertDecToRadians: true
-
-# Force TAN projection instead of possible unrecognized TNX?
-forceTanProjection: true

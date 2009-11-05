@@ -21,8 +21,8 @@ dateObs    : double
 
 gain       : float
 saturation : float
-trimsec    : string
-overscan   : string
+#trimsec    : string
+#overscan   : string
 
 # calibration data only
 # meancounts : float

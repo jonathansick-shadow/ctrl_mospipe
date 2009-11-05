@@ -1,0 +1,12 @@
+RunMode: preprocess
+
+Links: {
+	sourcePath: /data/CFHTLS_Deep/D4
+	destPath: %(input)/raw
+}
+
+Links: {
+	sourcePath: /data/CFHTLS_Deep/D4/calib
+	destPath: %(input)/calib
+}
+

@@ -10,7 +10,7 @@ ampBBoxKey: "ampBBox"
 outputCcdWcsKey: "ccdWcs"
 
 # Minimum flux of sources for WCS determination; default is 1000.0
-fluxLimit: 20000.0
+fluxLimit: 5000.0
 # Inform the solver that the image may suffer from some distortion. Leave this on if a purely linear wcs solution
 # will get the postions of some stars wrong by more than 1 pixel. Default is true
 allowDistortion: true

@@ -22,5 +22,7 @@ overscanKeyword: BIASSEC
 
 # ANY DATA CONVERSIONS BELOW
 
+forceTanProjection: true
+
 
 

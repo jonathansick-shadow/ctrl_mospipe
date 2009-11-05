@@ -1,25 +1,13 @@
-AdditionalData: "visitId=triggerImageprocEvent0.visitId"
+AdditionalData: "exposureId=triggerImageprocEvent.exposureId"
 AdditionalData: "ccdId=ccdId"
 AdditionalData: "ampId=ampId"
 OutputItems: {
-   calibratedExposure0: {
+   calibratedExposure: {
        Type: "ExposureF"
        PythonType: "lsst.afw.image.ExposureF"
        StoragePolicy: {
            Storage: "FitsStorage"
-           Location: "%(output)/sci/v%(visitId)-e0/v%(visitId)-e0-c%03d(ccdId)-a%02d(ampId).sci"
-       }
-       StoragePolicy: {
-           Storage: "DbStorage"
-           Location: "%(dbUrl)"
-       }
-   }
-   calibratedExposure1: {
-       Type: "ExposureF"
-       PythonType: "lsst.afw.image.ExposureF"
-       StoragePolicy: {
-           Storage: "FitsStorage"
-           Location: "%(output)/sci/v%(visitId)-e1/v%(visitId)-e1-c%03d(ccdId)-a%02d(ampId).sci"
+           Location: "%(output)/sci/calobj%(exposureId)/c%03d(ccdId)-a%02d(ampId)"
        }
        StoragePolicy: {
            Storage: "DbStorage"
@@ -31,10 +19,7 @@ OutputItems: {
 Persistence: {
    Formatter: {
       ExposureF: {
-         calibratedExposure0: {
-            TableName: "Science_Amp_Exposure"
-         }
-         calibratedExposure1: {
+         calibratedExposure: {
             TableName: "Science_Amp_Exposure"
          }
       }

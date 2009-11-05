@@ -210,12 +210,12 @@ execute: {
       stagePolicy: @IP/18-wcsDetermination_policy.paf
    }
 #   
-#   # Persist calibrated science exposures
-#   appStage: {
-#      stageName: "lsst.pex.harness.IOStage.OutputStage"
-#      eventTopic: "None"
-#      stagePolicy: @IP/19-calibratedExposuresOutput_policy.paf
-#   }
+   # Persist calibrated science exposures
+   appStage: {
+      stageName: "lsst.pex.harness.IOStage.OutputStage"
+      eventTopic: "None"
+      stagePolicy: @IP/19-calibratedExposuresOutput_policy.paf
+   }
 #   
 #   # Compute CCD-level metadata (no stage policy)
 #   appStage: {

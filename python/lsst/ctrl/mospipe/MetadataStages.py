@@ -110,6 +110,13 @@ def transformMetadata(metadata, datatypePolicy, metadataPolicy, suffix):
             decStr  = metadata.getString('decl')
             metadata.setDouble('decl', lsstutils.decStrToRad(raStr))
 
+    if datatypePolicy.exists('forceTanProjection'):
+        if datatypePolicy.getBool('forceTanProjection'):
+            if metadata.exists('CTYPE1'):
+                metadata.setString('CTYPE1','RA---TAN')
+            if metadata.exists('CTYPE2'):
+                metadata.setString('CTYPE2','DEC--TAN')
+            
 
 
 class ValidateMetadataStage(Stage):
