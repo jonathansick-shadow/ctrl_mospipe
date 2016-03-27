@@ -1,9 +1,9 @@
 #! /usr/bin/env python
 
-# 
+#
 # LSST Data Management System
 # Copyright 2008, 2009, 2010 LSST Corporation.
-# 
+#
 # This product includes software developed by the
 # LSST Project (http://www.lsst.org/).
 #
@@ -11,21 +11,25 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
-# You should have received a copy of the LSST License Statement and 
-# the GNU General Public License along with this program.  If not, 
+#
+# You should have received a copy of the LSST License Statement and
+# the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
 
 #
 from __future__ import with_statement
-import sys, os, time, datetime
-import optparse, traceback
+import sys
+import os
+import time
+import datetime
+import optparse
+import traceback
 import lsst.pex.harness.run as run
 import lsst.pex.logging as logging
 from lsst.pex.logging import Log, LogRec
@@ -42,17 +46,17 @@ run.addAllVerbosityOptions(cl, "V")
 cl.add_option("-r", "--runid", action="store", type="str",
               default="testEventLogger001", dest="runid", metavar="runid",
               help="runid to attach to messages")
-cl.add_option("-S", "--slice", action="store", type="int", default=-1, 
+cl.add_option("-S", "--slice", action="store", type="int", default=-1,
               dest="slice", metavar="id",
               help="slice ID to attach to messages")
-cl.add_option("-t", "--stage", action="store", type="int", default=None, 
+cl.add_option("-t", "--stage", action="store", type="int", default=None,
               dest="stage", metavar="id",
               help="stage ID to attach to messages")
-cl.add_option("-p", "--pipeline-name", action="store", type="str", 
-              dest="pipeline", metavar="name", default=None, 
+cl.add_option("-p", "--pipeline-name", action="store", type="str",
+              dest="pipeline", metavar="name", default=None,
               help="pipeline name to attach to messages")
-cl.add_option("-l", "--log-name", action="store", type="str", 
-              dest="logname", metavar="name", default=None, 
+cl.add_option("-l", "--log-name", action="store", type="str",
+              dest="logname", metavar="name", default=None,
               help="log name to send messages")
 cl.add_option("-T", "--log-topic", action="store", type="str",
               default=events.EventLog.getLoggingTopic(),
@@ -63,6 +67,7 @@ cl.add_option("-i", "--read-stdin", action="store_true", default=False,
 
 logger = Log(Log.getDefaultLog(), "showEvents")
 VERB = logger.INFO-2
+
 
 def main():
     """execute the testEventLogger script"""
@@ -85,7 +90,7 @@ def main():
         if cl.opts.stdin:
             input = sys.stdin
 
-        testEventLogger(broker, cl.opts.runid, cl.opts.slice, props, 
+        testEventLogger(broker, cl.opts.runid, cl.opts.slice, props,
                         input, cl.opts.logname, cl.opts.logtopic)
     except run.UsageError, e:
         print >> sys.stderr, "%s: %s" % (cl.get_prog_name(), e)
@@ -94,6 +99,7 @@ def main():
         logger.log(Log.FATAL, str(e))
         traceback.print_exc(file=sys.stderr)
         sys.exit(2)
+
 
 def testEventLogger(broker, runid, sliceid, props, input=None, logname=None,
                     logtopic="LSSTLogging"):
@@ -129,6 +135,7 @@ def testEventLogger(broker, runid, sliceid, props, input=None, logname=None,
 
     testLogger(uselog, input)
 
+
 def testLogger(log, input):
     """
     send test messages to the given logger
@@ -141,6 +148,7 @@ def testLogger(log, input):
     if input:
         for line in input:
             log.log(Log.INFO, line.strip())
+
 
 def setEventLogger(broker, runid, sliceid, verbose=False, topic="LSSTLogging"):
 
@@ -156,4 +164,4 @@ def setEventLogger(broker, runid, sliceid, verbose=False, topic="LSSTLogging"):
 
 if __name__ == "__main__":
     main()
-        
+

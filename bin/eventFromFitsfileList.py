@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-# 
+#
 # LSST Data Management System
 # Copyright 2008, 2009, 2010 LSST Corporation.
-# 
+#
 # This product includes software developed by the
 # LSST Project (http://www.lsst.org/).
 #
@@ -11,19 +11,22 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
-# You should have received a copy of the LSST License Statement and 
-# the GNU General Public License along with this program.  If not, 
+#
+# You should have received a copy of the LSST License Statement and
+# the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
 
 
-import os, sys, re, traceback
+import os
+import sys
+import re
+import traceback
 import glob
 import imp
 import time
@@ -69,9 +72,9 @@ if('eventFromFitsfile' in sys.modules):
     import eventFromFitsfile
 else:
     thisDir = this_dir = os.path.dirname(os.path.realpath(__file__))
-    fp, pathname, description = imp.find_module('eventFromFitsfile', [thisDir,])
+    fp, pathname, description = imp.find_module('eventFromFitsfile', [thisDir, ])
 try:
-    eventFromFitsfile = imp.load_module('eventFromFitsfile', fp, pathname, 
+    eventFromFitsfile = imp.load_module('eventFromFitsfile', fp, pathname,
                                         description)
 finally:
     # Since we may exit via an exception, close fp explicitly.
@@ -88,12 +91,13 @@ logger = pexLog.Log(pexLog.Log.getDefaultLog(),
                     "dc3pipe.eventFromFitsfileList")
 visitCount = 0
 
-def EventFromInputFileList(inputfile, 
-                           datatypePolicy, 
+
+def EventFromInputFileList(inputfile,
+                           datatypePolicy,
                            expTime=EXP_TIME,
                            slewTime=SLEW_TIME,
                            maxvisits=-1,
-                           rootTopicName=ROOT_EVENT_TOPIC, 
+                           rootTopicName=ROOT_EVENT_TOPIC,
                            hostName=EVENT_BROKER,
                            metadataPolicy=None):
     """
@@ -118,7 +122,7 @@ def EventFromInputFileList(inputfile,
                   raw-<visitId>-e000-c<ccdId>-a<ampId>.fits
                 1/
                   raw-<visitId>-e001-c<ccdId>-a<ampId>.fits
-    
+
     @param inputfile        name of the directory list file.
     @param datatypePolicy   policy file for the input data.
     @param expTime          assumed exposure per visit in seconds (defaults 
@@ -131,53 +135,53 @@ def EventFromInputFileList(inputfile,
                                first or second image of the visit.
     @param hostName         hostname of the event broker.
     @param metadataPolicy   policy defining the event metadata types
-    
+
     @return None
     """
     global visitCount
-    
+
     # Create a metadata policy object.
     if metadataPolicy is None:
-        mpf = pexPolicy.DefaultPolicyFile("ctrl_dc3pipe", 
+        mpf = pexPolicy.DefaultPolicyFile("ctrl_dc3pipe",
                                           "dc3MetadataPolicy.paf", "pipeline")
         metadataPolicy = pexPolicy.Policy.createPolicy(mpf,
                                                        mpf.getRepositoryPath())
-    
+
     # Covenience function.
     def sendEvent(f):
-        return(eventFromFitsfile.EventFromInputfile(f, 
-                                                    datatypePolicy, 
+        return(eventFromFitsfile.EventFromInputfile(f,
+                                                    datatypePolicy,
                                                     metadataPolicy,
-                                                    rootTopicName, 
+                                                    rootTopicName,
                                                     hostName))
-    
+
     f = open(inputfile)
     for line in f:
         dirName = line.strip()
         if(line.startswith('#')):
             continue
-        
+
         visitCount += 1
         if maxvisits >= 0 and visitCount > maxvisits:
             logger.log(logger.INFO,
                        "Maximum visit count reached (%s); quitting." %
                        maxvisits)
-            return 
-            
+            return
+
         # Get the list of amp FITS files in each dir.
         fileList0 = glob.glob(os.path.join(dirName, '0', '*.fits'))
         fileList1 = glob.glob(os.path.join(dirName, '1', '*.fits'))
-        
+
         # Simple sanity check.
         if(len(fileList0) != len(fileList1)):
-            pexLog.Trace('dc3pipe.eventfrominputfilelist', 1, 
-                         'Skipping %s: wrong file count in 0 and 1' \
-                         %(dirName))
+            pexLog.Trace('dc3pipe.eventfrominputfilelist', 1,
+                         'Skipping %s: wrong file count in 0 and 1'
+                         % (dirName))
             continue
-        
+
         # Now we just trust that the i-th file in 0 corresponds to the i-th file
-        # in 1... Fortunately, we only need to send one event per image 
-        # directory, since all images there are one MEF split into individual 
+        # in 1... Fortunately, we only need to send one event per image
+        # directory, since all images there are one MEF split into individual
         # amps.
         sendEvent(fileList0[0])
         # Sleep some.
@@ -188,7 +192,7 @@ def EventFromInputFileList(inputfile,
         time.sleep(expTime + slewTime)
     f.close()
     return
-    
+
 
 def defineCmdLine():
     cl = eventFromFitsfile.defineCmdLine(usage, desc)
@@ -197,6 +201,7 @@ def defineCmdLine():
                   help="maximum number of visits to trigger")
     return cl
 
+
 def main(cmdline):
     """
     run the script with the given command line
@@ -204,12 +209,12 @@ def main(cmdline):
     """
     cl = cmdline
     (cl.opts, cl.args) = cl.parse_args()
-    pexLog.Log.getDefaultLog().setThreshold( \
+    pexLog.Log.getDefaultLog().setThreshold(
         run.verbosity2threshold(cl.opts.verb, 0))
 
     if len(sys.argv) < 3:
         raise run.UsageError("Missing arguments")
-    
+
     inputDirectoryList = cl.args[0]
     datatypePolicy = pexPolicy.Policy.createPolicy(cl.args[1])
     expTime = EXP_TIME
@@ -222,11 +227,11 @@ def main(cmdline):
     metadataPolicy = None
     if cl.opts.mdpolicy is not None:
         metadataPolicy = pexPolicy.Policy.createPolicy(metadataPolicy)
-    
-    EventFromInputFileList(inputDirectoryList, datatypePolicy, expTime, 
-                           slewTime, cl.opts.maxvisits, cl.opts.topic, 
+
+    EventFromInputFileList(inputDirectoryList, datatypePolicy, expTime,
+                           slewTime, cl.opts.maxvisits, cl.opts.topic,
                            cl.opts.broker, metadataPolicy)
-        
+
 
 if __name__ == "__main__":
     try:
@@ -239,5 +244,5 @@ if __name__ == "__main__":
         logger.log(logger.FATAL, str(e))
         traceback.print_exc(file=sys.stderr)
         sys.exit(2)
-    
-    
+
+

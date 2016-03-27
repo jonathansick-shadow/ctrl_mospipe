@@ -1,9 +1,9 @@
 #! /usr/bin/env python
 
-# 
+#
 # LSST Data Management System
 # Copyright 2008, 2009, 2010 LSST Corporation.
-# 
+#
 # This product includes software developed by the
 # LSST Project (http://www.lsst.org/).
 #
@@ -11,21 +11,24 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
-# You should have received a copy of the LSST License Statement and 
-# the GNU General Public License along with this program.  If not, 
+#
+# You should have received a copy of the LSST License Statement and
+# the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
 
 #
 from __future__ import with_statement
-import sys, os, time
-import optparse, traceback
+import sys
+import os
+import time
+import optparse
+import traceback
 import lsst.pex.harness.run as run
 from lsst.pex.logging import Log, LogRec
 from lsst.pex.policy import Policy
@@ -45,42 +48,43 @@ cl.add_option("-m", "--max-visits", action="store", type="int",
               help="maximum number of visits to trigger")
 cl.add_option("-V", "--verbosity", type="int", action="store",
               dest="verbosity", default=0, metavar="int",
-         help="orca verbosity level (0=normal, 1=debug, -1=quiet, -3=silent)")
+              help="orca verbosity level (0=normal, 1=debug, -1=quiet, -3=silent)")
 cl.add_option("-r", "--policyRepository", type="string", action="store",
               dest="repos", default=None, metavar="dir",
               help="directory containing policy files")
 cl.add_option("-e", "--envscript", action="store", dest="envscript",
               default=None, metavar="script",
-          help="an environment-setting script to source on pipeline platform")
-cl.add_option("-d", "--debug", action="store_const", const=1, 
+              help="an environment-setting script to source on pipeline platform")
+cl.add_option("-d", "--debug", action="store_const", const=1,
               dest="verbosity", help="print maximum amount of messages")
 cl.add_option("-v", "--verbose", action="store_const", const=1,
               dest="verbosity", help="same as -d")
 cl.add_option("-q", "--quiet", action="store_const", const=-1,
               dest="verbosity", help="print only warning & error messages")
-cl.add_option("-s", "--slew-time", action="store", type="int", default=5, 
-             dest="slewtime", help="telescope slew time in seconds (def: 5)")
-cl.add_option("-x", "--exposure-time", action="store", type="int", default=15, 
+cl.add_option("-s", "--slew-time", action="store", type="int", default=5,
+              dest="slewtime", help="telescope slew time in seconds (def: 5)")
+cl.add_option("-x", "--exposure-time", action="store", type="int", default=15,
               dest="exptime", help="exposure time in seconds (def: 15)")
-cl.add_option("-t", "--data-type", action="store", default="cfht", 
+cl.add_option("-t", "--data-type", action="store", default="cfht",
               dest="datatype",
               help="type of data in given visit files; choices: cfht|sim; " +
               "minimum match, case-insensitive; def: cfht")
-cl.add_option("-C", "--collections", action="store", default=None, 
+cl.add_option("-C", "--collections", action="store", default=None,
               dest="colls", help="a list of the datset collections names (support: D1|D2|D3|D4)")
 
-mospkg   = "ctrl_mospipe"
+mospkg = "ctrl_mospipe"
 pkgdirvar = mospkg.upper() + "_DIR"
 loggingEventTopic = events.EventLog.getLoggingTopic()
 waitLogName = "harness.pipeline.visit.stage.handleEvents.eventwait"
 setuptime = 3000    # seconds
-shortsetuptime = 30 # seconds
-datatypes = { "cfht": "datatypePolicy/cfhtDataTypePolicy.paf",
-              "sim":  "datatypePolicy/simDataTypePolicy.paf"   }
+shortsetuptime = 30  # seconds
+datatypes = {"cfht": "datatypePolicy/cfhtDataTypePolicy.paf",
+             "sim": "datatypePolicy/simDataTypePolicy.paf"}
 datatypes['d1'] = datatypes['cfht']
 datatypes['d2'] = datatypes['cfht']
 datatypes['d3'] = datatypes['cfht']
 datatypes['d4'] = datatypes['cfht']
+
 
 def main():
     "execute the launchMospipe script"
@@ -98,7 +102,7 @@ def main():
         if len(t) > 1:
             raise ValueError("Ambiguous data type name: " + cl.opts.datatype)
         if len(t) == 0:
-            raise ValueError("Unrecognized data type name: "+ cl.opts.datatype)
+            raise ValueError("Unrecognized data type name: " + cl.opts.datatype)
         cl.opts.datatype = datatypes[t[0]]
 
         colls = []
@@ -107,7 +111,7 @@ def main():
             colls = cl.opts.colls.split(',')
 
         launchMos(cl.args[0], cl.args[1], cl.args[2:], colls, cl.opts, logger)
-        
+
     except run.UsageError, e:
         print >> sys.stderr, "%s: %s" % (cl.get_prog_name(), e)
         sys.exit(1)
@@ -115,7 +119,7 @@ def main():
         logger.log(Log.FATAL, str(e))
         traceback.print_exc(file=sys.stderr)
         sys.exit(2)
-        
+
 
 def launchMos(policyFile, runid, visitFiles, colls, opts, logger):
 
@@ -131,12 +135,13 @@ def launchMos(policyFile, runid, visitFiles, colls, opts, logger):
     print >> sys.stderr, "Using event broker on %s" % broker
 
     recvr = events.EventReceiver(broker, loggingEventTopic)
-    
+
     runOrca(policyFile, runid, opts, logger)
 
     waitForReady(policy, runid, recvr, opts.pipeverb, logger)
 
     runEventGen(policy, visitFiles, colls, opts, broker, logger)
+
 
 def runOrca(policyFile, runid, opts, logger):
     cmdopts = ""
@@ -148,13 +153,14 @@ def runOrca(policyFile, runid, opts, logger):
         cmdopts += " -V %s" % opts.verbosity
     if opts.pipeverb is not None:
         cmdopts += " -L %s" % opts.pipeverb
-        
+
     cmd = "orca.py%s %s %s" % (cmdopts, policyFile, runid)
     print >> sys.stderr, "Running orca: %s" % cmd
     try:
         sysexec(cmd, logger)
     except OSError, e:
         raise LsstException("orca.py failed: " + str(e))
+
 
 def waitForReady(policy, runid, eventrcvr, logverb, logger):
     """
@@ -196,7 +202,7 @@ def waitForReady(policy, runid, eventrcvr, logverb, logger):
                    "Waiting for the %s pipeline to be ready..." % pl)
 
     if "IPSD" not in pipelines:
-        timeout = shortsetuptime # seconds
+        timeout = shortsetuptime  # seconds
 
     if len(pipelines) > 0:
         logger.log(Log.INFO,
@@ -206,7 +212,7 @@ def waitForReady(policy, runid, eventrcvr, logverb, logger):
         while len(pipelines) > 0:
             waittime = 1000 * (timeout - int(round(time.time()-tick)))
             if waittime > 0:
-#                waitprops = eventrcvr.receive(waittime)
+                #                waitprops = eventrcvr.receive(waittime)
                 waitprops = eventrcvr.matchingReceive("LOG", waitLogName,
                                                       waittime)
             else:
@@ -214,9 +220,9 @@ def waitForReady(policy, runid, eventrcvr, logverb, logger):
 
             if waitprops is None:
                 LogRec(logger, Log.WARN) \
-                  << "Have yet to hear back from the following pipelines: " +\
-                      ", ".join(pipelines) \
-                  << "Proceeding to send visit events" << LogRec.endr
+                    << "Have yet to hear back from the following pipelines: " +\
+                    ", ".join(pipelines) \
+                    << "Proceeding to send visit events" << LogRec.endr
                 break
             if waitprops.getString("STATUS", "") == "start" and \
                waitprops.getString("runId", "") == runid:
@@ -228,13 +234,14 @@ def waitForReady(policy, runid, eventrcvr, logverb, logger):
 
     else:
         LogRec(logger, Log.WARN) \
-                       << "Unable to detect when pipelines are ready" \
-                       << "Proceeding to send visit events in %d seconds" % \
-                          shortsetuptime \
-                       << LogRec.endr
+            << "Unable to detect when pipelines are ready" \
+            << "Proceeding to send visit events in %d seconds" % \
+            shortsetuptime \
+            << LogRec.endr
         time.sleep(shortsetuptime)
 
     return
+
 
 def runEventGen(policy, visitFiles, colls, opts, broker, logger):
 
@@ -251,7 +258,7 @@ def runEventGen(policy, visitFiles, colls, opts, broker, logger):
                 cmdopts += " -m %i" % opts.maxvisits
             datatypePolicy = os.path.join(os.environ[pkgdirvar], "pipeline",
                                           opts.datatype)
-            
+
             cmd = "eventFromFitsfileList.py%s -b %s %s %s" % \
                   (cmdopts, broker, file, datatypePolicy)
             if opts.exptime is not None:
@@ -303,7 +310,7 @@ def sysexec(cmd, logger):
     if logger is not None:
         logger.log(logger.DEBUG, "Executing: %s" % cmd)
     cmd = cmd.split()
-    exno = os.spawnvp(os.P_WAIT, cmd[0], cmd);
+    exno = os.spawnvp(os.P_WAIT, cmd[0], cmd)
     if exno != 0:
         raise OSError("Command exited with code %d" % (exno >> 8))
 

@@ -1,9 +1,9 @@
 #! /usr/bin/env python
 
-# 
+#
 # LSST Data Management System
 # Copyright 2008, 2009, 2010 LSST Corporation.
-# 
+#
 # This product includes software developed by the
 # LSST Project (http://www.lsst.org/).
 #
@@ -11,20 +11,26 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
-# You should have received a copy of the LSST License Statement and 
-# the GNU General Public License along with this program.  If not, 
+#
+# You should have received a copy of the LSST License Statement and
+# the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
 
 #
-import re, sys, os, os.path, shutil, subprocess
-import optparse, traceback
+import re
+import sys
+import os
+import os.path
+import shutil
+import subprocess
+import optparse
+import traceback
 from lsst.pex.logging import Log
 from lsst.pex.policy import Policy
 from lsst.pex.exceptions import LsstCppException
@@ -50,18 +56,18 @@ cl.add_option("-s", "--silent", action="store_const", const=-3,
 cl.add_option("-n", "--show", action="store_true", default=False,
               dest="showOnly",
               help="only show the kill commands that would be run")
-cl.add_option("-p", "--production-policy", action="store", dest="prodpol", 
+cl.add_option("-p", "--production-policy", action="store", dest="prodpol",
               default=None, metavar="policy_file",
               help="the dc3pipe production policy file used to launch the pipelines")
-cl.add_option("-l", "--platform-policy", action="store", dest="platpol", 
+cl.add_option("-l", "--platform-policy", action="store", dest="platpol",
               default=None, metavar="policy_file",
               help="the platform policy file used to launch a pipeline")
-cl.add_option("-i", "--runid", action="store", dest="runid", 
+cl.add_option("-i", "--runid", action="store", dest="runid",
               default="", metavar="runid",
               help="restrict the kill to pipelines running with this runid")
-cl.add_option("-r", "--repository-dir", action="store", dest="repos", 
+cl.add_option("-r", "--repository-dir", action="store", dest="repos",
               default=None, metavar="dir",
-           help="assume the given policy repository directory (for -p and -l)")
+              help="assume the given policy repository directory (for -p and -l)")
 
 # command line results
 cl.opts = {}
@@ -71,18 +77,21 @@ pkgdirvar = "CTRL_DC3PIPE_DIR"
 defDomain = ".ncsa.uiuc.edu"
 remkill = "killpipe.sh"
 
+
 def createLog():
     log = Log(Log.getDefaultLog(), "dc3pipe")
     return log
 
+
 def setVerbosity(verbosity):
-    logger.setThreshold(-10 * verbosity)  
+    logger.setThreshold(-10 * verbosity)
 
 logger = createLog()
 
+
 def main():
     try:
-        (cl.opts, cl.args) = cl.parse_args();
+        (cl.opts, cl.args) = cl.parse_args()
         setVerbosity(cl.opts.verbosity)
 
         nodes = []
@@ -98,16 +107,16 @@ def main():
                 policy.loadPolicyFiles(repos)
 
             nodes.extend(getHeadNodes(policy))
-            
+
         if cl.opts.platpol is not None:
             policy = Policy.createPolicy(cl.opts.platpol)
             nodes.extend(getHeadNode(policy))
-            
+
         nodes.extend(cl.args)
         logger.log(Log.DEBUG, "Killing pipelines on " + ", ".join(nodes))
 
         remcmd = "%s %s" % \
-            (os.path.join(os.environ[pkgdirvar], "bin", remkill),cl.opts.runid)
+            (os.path.join(os.environ[pkgdirvar], "bin", remkill), cl.opts.runid)
         remcmd = remcmd.strip()
 
         for node in nodes:
@@ -126,6 +135,7 @@ def main():
 
     sys.exit(0)
 
+
 def getHeadNodes(prodpolicy, file=None):
     """return the head from a platform policy.
     @param prodpolicy   a production policy object
@@ -138,18 +148,19 @@ def getHeadNodes(prodpolicy, file=None):
     for pipeline in pipelines:
         ppol = pipepol.get(pipeline)
         if ppol.get("launch", True):
-            try: 
+            try:
                 platform = ppol.get("platform")
                 if platform is not None:
                     nodes.extend(getHeadNode(platform, file, pipeline))
             except LsstCppException, e:
                 msg = \
-                  "Pipeline policy for %s is missing platform item" % pipeline
+                    "Pipeline policy for %s is missing platform item" % pipeline
                 if file is not None:
                     msg += " via %s" % file
                 logger.log(Log.WARN, msg)
-            
+
     return nodes
+
 
 def getHeadNode(platpolicy, file=None, pipeline=None):
     """return the head from a platform policy.
@@ -157,9 +168,10 @@ def getHeadNode(platpolicy, file=None, pipeline=None):
     @param file         the file where this was loaded from
     @param pipeline     then name of the pipeline
     """
-    try: 
+    try:
         plnodes = platpolicy.getArray("deploy.nodes")
-        if plnodes is None or len(plnodes) == 0:  return []
+        if plnodes is None or len(plnodes) == 0:
+            return []
         return [plnodes[0].split(':')[0]]
     except LsstCppException, e:
         msg = "Platform policy is missing platform item"
@@ -170,6 +182,7 @@ def getHeadNode(platpolicy, file=None, pipeline=None):
         logger.log(Log.WARN, msg)
 
     return []
+
 
 def getRepositoryDir(prodpolicy):
     """
@@ -188,7 +201,7 @@ def getRepositoryDir(prodpolicy):
         var = envre.search(next)
 
     return dir
-        
+
 
 if __name__ == "__main__":
     main()

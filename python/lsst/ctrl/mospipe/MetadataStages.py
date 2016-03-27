@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-# 
+#
 # LSST Data Management System
 # Copyright 2008, 2009, 2010 LSST Corporation.
-# 
+#
 # This product includes software developed by the
 # LSST Project (http://www.lsst.org/).
 #
@@ -11,14 +11,14 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
-# You should have received a copy of the LSST License Statement and 
-# the GNU General Public License along with this program.  If not, 
+#
+# You should have received a copy of the LSST License Statement and
+# the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
 
@@ -35,14 +35,20 @@ from lsst.pex.harness.Stage import Stage
 propertySetTypeInfos = {}
 logger = pexLog.Log(pexLog.Log.getDefaultLog(), "mospipe.MetadataStages.py")
 
+
 def setTypeInfos():
     global propertySetTypeInfos
     p = dafBase.PropertySet()
-    p.set("str",  "bar"); propertySetTypeInfos["string"] = p.typeOf("str")
-    p.set("int",      3); propertySetTypeInfos["int"]    = p.typeOf("int")
-    p.set("float",  3.1); propertySetTypeInfos["float"]  = p.typeOf("float")
-    p.set("bool",  True); propertySetTypeInfos["bool"]   = p.typeOf("bool")
+    p.set("str", "bar")
+    propertySetTypeInfos["string"] = p.typeOf("str")
+    p.set("int", 3)
+    propertySetTypeInfos["int"] = p.typeOf("int")
+    p.set("float", 3.1)
+    propertySetTypeInfos["float"] = p.typeOf("float")
+    p.set("bool", True)
+    propertySetTypeInfos["bool"] = p.typeOf("bool")
 setTypeInfos()
+
 
 def validateMetadata(metadata, metadataPolicy):
     paramNames = metadataPolicy.paramNames(1)
@@ -52,15 +58,16 @@ def validateMetadata(metadata, metadataPolicy):
         # TBD; VALIDATE AGAINST DICTIONARY FOR TYPE ETC
     return True
 
+
 def transformMetadata(metadata, datatypePolicy, metadataPolicy, suffix):
     logger.log(logger.INFO, metadata.toString())
     paramNames = metadataPolicy.paramNames(1)
-                    
+
     for paramName in paramNames:
         # If it already exists don't try and update it
         if metadata.exists(paramName):
             continue
-        
+
         mappingKey = paramName + suffix
         if datatypePolicy.exists(mappingKey):
             keyword = datatypePolicy.getString(mappingKey)
@@ -75,30 +82,29 @@ def transformMetadata(metadata, datatypePolicy, metadataPolicy, suffix):
             else:
                 metadata.copy(paramName, metadata, keyword)
 
-    # Copy used metadata to _original and remove used 
+    # Copy used metadata to _original and remove used
 
     for paramName in paramNames:
         # If it already exists don't copy and remove it
         if metadata.exists(paramName):
             continue
-        
+
         mappingKey = paramName + suffix
         if datatypePolicy.exists(mappingKey):
             metadata.copy(keyword + "_original", metadata, keyword)
             metadata.remove(keyword)
 
-
     # Any additional operations on the input data?
     if datatypePolicy.exists('convertDateobsToTai'):
         if datatypePolicy.getBool('convertDateobsToTai'):
-            dateObs  = metadata.getDouble('dateObs')
+            dateObs = metadata.getDouble('dateObs')
             dateTime = dafBase.DateTime(dateObs, dafBase.DateTime.UTC)
-            dateObs  = dateTime.mjd(dafBase.DateTime.TAI)
+            dateObs = dateTime.mjd(dafBase.DateTime.TAI)
             metadata.setDouble('dateObs', dateObs)
 
     if datatypePolicy.exists('convertDateobsToMidExposure'):
         if datatypePolicy.getBool('convertDateobsToMidExposure'):
-            dateObs  = metadata.getDouble('dateObs')
+            dateObs = metadata.getDouble('dateObs')
             dateObs += metadata.getDouble('expTime') * 0.5 / 3600. / 24.
             metadata.setDouble('dateObs', dateObs)
 
@@ -113,33 +119,31 @@ def transformMetadata(metadata, datatypePolicy, metadataPolicy, suffix):
 
     if datatypePolicy.exists('convertVisitIdToInt'):
         if datatypePolicy.getBool('convertVisitIdToInt'):
-            visitId  = metadata.getString('visitId')
+            visitId = metadata.getString('visitId')
             metadata.setInt('visitId', int(visitId))
 
     if datatypePolicy.exists('trimFileNameForExpID'):
         if datatypePolicy.getBool('trimFileNameForExpID'):
-            exposureId  = metadata.getString('exposureId')
+            exposureId = metadata.getString('exposureId')
             exposureId = re.sub(r'[a-zA-Z]+', '', exposureId)
             metadata.setInt('exposureId', int(exposureId))
 
-
     if datatypePolicy.exists('convertRaToRadians'):
         if datatypePolicy.getBool('convertRaToRadians'):
-            raStr  = metadata.getString('ra')
+            raStr = metadata.getString('ra')
             metadata.setDouble('ra', lsstutils.raStrToRad(raStr))
 
     if datatypePolicy.exists('convertDecToRadians'):
         if datatypePolicy.getBool('convertDecToRadians'):
-            decStr  = metadata.getString('decl')
+            decStr = metadata.getString('decl')
             metadata.setDouble('decl', lsstutils.decStrToRad(raStr))
 
     if datatypePolicy.exists('forceTanProjection'):
         if datatypePolicy.getBool('forceTanProjection'):
             if metadata.exists('CTYPE1'):
-                metadata.setString('CTYPE1','RA---TAN')
+                metadata.setString('CTYPE1', 'RA---TAN')
             if metadata.exists('CTYPE2'):
-                metadata.setString('CTYPE2','DEC--TAN')
-            
+                metadata.setString('CTYPE2', 'DEC--TAN')
 
 
 class ValidateMetadataStage(Stage):
@@ -161,7 +165,8 @@ class ValidateMetadataStage(Stage):
         metadata = clipboard.get(imageMetadataKey)
         validateMetadata(metadata, metadataPolicy)
         self.outputQueue.addDataset(clipboard)
-    
+
+
 class TransformMetadataStage(Stage):
 
     """This stage takes an input set of metadata and transforms this
@@ -194,7 +199,6 @@ class TransformMetadataStage(Stage):
                 wcs.shiftReferencePixel(ampBBox.getX0(), ampBBox.getY0())
                 clipboard.put(wcsKey, wcs)
 
-        
         # set various exposure id's needed by downstream stages
 
         ccdId = clipboard.get("ccdId")
@@ -209,19 +213,19 @@ class TransformMetadataStage(Stage):
         ampExposureId = (ccdExposureId << 6) + ampId
 
         metadata.setLongLong('ampExposureId', ampExposureId)
-        metadata.setLongLong('ccdExposureId',ccdExposureId)
-        metadata.setLongLong('fpaExposureId',fpaExposureId)
+        metadata.setLongLong('ccdExposureId', ccdExposureId)
+        metadata.setLongLong('fpaExposureId', fpaExposureId)
         metadata.set('ampId', ampId)
         metadata.set('ccdId', ampId)
 #        metadata.set('url', metadata.get('filename'))   # who uses this??
 
         transformMetadata(metadata, datatypePolicy, metadataPolicy, suffix)
 
-
         clipboard.put(metadataKey, metadata)
         clipboard.put(imageKey, decoratedImage.getImage())
 
         self.outputQueue.addDataset(clipboard)
+
 
 class TransformExposureMetadataStage(Stage):
 
@@ -249,8 +253,9 @@ class TransformExposureMetadataStage(Stage):
             metadata = exposure.getMetadata()
             transformMetadata(metadata, datatypePolicy, metadataPolicy, suffix)
             exposure.getMaskedImage().setXY0(ampBBox.getLLC())
-            logger.log(logger.INFO,"Setting XY0 to %f, %f" % (ampBBox.getX0, ampBBox.getY0))
+            logger.log(logger.INFO, "Setting XY0 to %f, %f" % (ampBBox.getX0, ampBBox.getY0))
         self.outputQueue.addDataset(clipboard)
+
 
 class TransformCalibrationImageStage(Stage):
 
@@ -269,7 +274,7 @@ class TransformCalibrationImageStage(Stage):
             suffix = "Keyword"
 
         for imageKey in imageKeys:
-            exposureKey = re.sub(r'Image','Exposure', imageKey)
+            exposureKey = re.sub(r'Image', 'Exposure', imageKey)
             dImage = clipboard.get(imageKey)
             mask = afwImage.MaskU(dImage.getDimensions())
             mask.set(0)
@@ -280,5 +285,5 @@ class TransformCalibrationImageStage(Stage):
             exposure = afwImage.makeExposure(maskedImage)
             exposure.setMetadata(metadata)
             clipboard.put(exposureKey, exposure)
-            
+
         self.outputQueue.addDataset(clipboard)

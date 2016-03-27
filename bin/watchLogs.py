@@ -1,9 +1,9 @@
 #! /usr/bin/env python
 
-# 
+#
 # LSST Data Management System
 # Copyright 2008, 2009, 2010 LSST Corporation.
-# 
+#
 # This product includes software developed by the
 # LSST Project (http://www.lsst.org/).
 #
@@ -11,21 +11,25 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
-# You should have received a copy of the LSST License Statement and 
-# the GNU General Public License along with this program.  If not, 
+#
+# You should have received a copy of the LSST License Statement and
+# the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
 
 #
 from __future__ import with_statement
-import sys, os, time, datetime
-import optparse, traceback
+import sys
+import os
+import time
+import datetime
+import optparse
+import traceback
 import lsst.pex.harness.run as run
 from lsst.pex.logging import Log, LogRec
 from lsst.pex.exceptions import LsstException
@@ -43,10 +47,10 @@ logname that begins with the string preceding the '*'.
 
 cl = optparse.OptionParser(usage=usage, description=desc)
 run.addAllVerbosityOptions(cl, "V")
-cl.add_option("-w", "--wait-time", action="store", type="int", default=10, 
+cl.add_option("-w", "--wait-time", action="store", type="int", default=10,
               dest="sleep", metavar="seconds",
               help="seconds to sleep when no events available (def: 10)")
-cl.add_option("-S", "--slice", action="store", type="int", default=None, 
+cl.add_option("-S", "--slice", action="store", type="int", default=None,
               dest="slice", metavar="id",
               help="restrict to given slice ID")
 cl.add_option("-H", "--include-hosts", action="store", type="str",
@@ -65,6 +69,7 @@ cl.add_option("-X", "--exclude-hosts", action="store", type="str",
 logger = Log(Log.getDefaultLog(), "showEvents")
 VERB = logger.INFO-2
 timeoffset = time.time()
+
 
 def main():
     """execute the watchLogs script"""
@@ -99,6 +104,7 @@ def main():
         traceback.print_exc(file=sys.stderr)
         sys.exit(2)
 
+
 def watchLogs(broker, lognames, sleep=10, sliceid=None,
               hosts=None, hostexclude=False,
               minimport=None, maximport=None):
@@ -126,9 +132,10 @@ def watchLogs(broker, lognames, sleep=10, sliceid=None,
     listen(rcvr, sys.stdout, lognames, sleep, sliceid, hosts, hostexclude,
            minimport, maximport)
 
+
 def listen(receiver, dest, lognames, sleep, sliceid=None, hosts=None,
            hostexclude=False, minimport=None, maximport=None):
-           
+
     try:
         while True:
             if checkMessages(receiver, dest, lognames, sliceid,
@@ -136,6 +143,7 @@ def listen(receiver, dest, lognames, sleep, sliceid=None, hosts=None,
                 time.sleep(sleep)
     except KeyboardInterrupt:
         logger.log(VERB, "KeyboardInterrupt: stopping event monitoring")
+
 
 def checkMessages(receiver, dest, lognames, sliceid=None,
                   hosts=None, hostexclude=False,
@@ -147,7 +155,7 @@ def checkMessages(receiver, dest, lognames, sliceid=None,
     count = 0
 
     likenames = map(lambda x: x[:-1],
-                   filter(lambda y: y.endswith('*'), lognames))
+                    filter(lambda y: y.endswith('*'), lognames))
     names = filter(lambda y: not y.endswith('*'), lognames)
 
     while True:
@@ -171,9 +179,11 @@ def checkMessages(receiver, dest, lognames, sliceid=None,
                     continue
 
         level = event.getInt("LEVEL", 0)
-        if minimport is not None and level < minimport:  continue
-        if maximport is not None and level > maximport:  continue
-        
+        if minimport is not None and level < minimport:
+            continue
+        if maximport is not None and level > maximport:
+            continue
+
         date = str(datetime.datetime.utcfromtimestamp(ts))
         ts -= timeoffset
         if event.exists("TIMESTAMP"):
@@ -191,7 +201,7 @@ def checkMessages(receiver, dest, lognames, sliceid=None,
         elif level < logger.INFO:
             lev = "DEBUG "
         count += 1
-        
+
         if silent:
             continue
         for comm in event.getArrayString("COMMENT"):
@@ -203,4 +213,4 @@ def checkMessages(receiver, dest, lognames, sliceid=None,
 
 if __name__ == "__main__":
     main()
-        
+

@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-# 
+#
 # LSST Data Management System
 # Copyright 2008, 2009, 2010 LSST Corporation.
-# 
+#
 # This product includes software developed by the
 # LSST Project (http://www.lsst.org/).
 #
@@ -11,19 +11,23 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
-# You should have received a copy of the LSST License Statement and 
-# the GNU General Public License along with this program.  If not, 
+#
+# You should have received a copy of the LSST License Statement and
+# the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
 
 
-import os, sys, re, optparse, traceback
+import os
+import sys
+import re
+import optparse
+import traceback
 import eups
 import lsst.afw.image as afwImage
 import lsst.afw.math as afwMath
@@ -47,6 +51,7 @@ logger = pexLog.Log(pexLog.Log.getDefaultLog(), "mospipe.eventFromFitsfile")
 exposureCount = 0
 VERB3 = run.verbosity2threshold("verb3", logger.INFO-3)
 
+
 def defineCmdLine(usage=usage, description=desc):
     cl = optparse.OptionParser(usage=usage, description=description)
     run.addAllVerbosityOptions(cl, "V", "verb")
@@ -59,6 +64,7 @@ def defineCmdLine(usage=usage, description=desc):
                   help="policy file defining the event metadata types")
     return cl
 
+
 def main(cmdline):
     """
     run the script with the given command line
@@ -66,7 +72,7 @@ def main(cmdline):
     """
     cl = cmdline
     (cl.opts, cl.args) = cl.parse_args()
-    pexLog.Log.getDefaultLog().setThreshold( \
+    pexLog.Log.getDefaultLog().setThreshold(
         run.verbosity2threshold(cl.opts.verb, 0))
 
     mdPolicyFileName = cl.opts.mdpolicy
@@ -86,10 +92,11 @@ def main(cmdline):
         # EventFromInputfile will print error message
         sys.exit(3)
 
-def EventFromInputfile(inputfile, 
-                       datatypePolicy, 
+
+def EventFromInputfile(inputfile,
+                       datatypePolicy,
                        metadataPolicy,
-                       topicName='triggerImageprocEvent', 
+                       topicName='triggerImageprocEvent',
                        hostName='newfield.as.arizona.edu'):
     """generate a new file event for a given FITS file
     @param inputfile       the name of the FITS file
@@ -100,7 +107,7 @@ def EventFromInputfile(inputfile,
     """
     global exposureCount
     exposureCount += 1
-    
+
     # For mosphot, inputfile is a .fits file on disk
     metadata = afwImage.readMetadata(inputfile)
 #    logger.log(logger.INFO,"Original metadata:\n" + metadata.toString())
@@ -114,15 +121,15 @@ def EventFromInputfile(inputfile,
 
     # Create event policy, using defaults from input metadata
     event = dafBase.PropertySet()
-    event.copy('exposureId',  metadata, 'exposureId')
-    event.copy('datasetId',   metadata, 'datasetId')
-    event.copy('filter',      metadata, 'filter')
-    event.copy('expTime',     metadata, 'expTime')
-    event.copy('ra',          metadata, 'ra')
-    event.copy('decl',        metadata, 'decl')
-    event.copy('equinox',     metadata, 'equinox')
-    event.copy('airmass',     metadata, 'airmass')
-    event.copy('dateObs',     metadata, 'dateObs')
+    event.copy('exposureId', metadata, 'exposureId')
+    event.copy('datasetId', metadata, 'datasetId')
+    event.copy('filter', metadata, 'filter')
+    event.copy('expTime', metadata, 'expTime')
+    event.copy('ra', metadata, 'ra')
+    event.copy('decl', metadata, 'decl')
+    event.copy('equinox', metadata, 'equinox')
+    event.copy('airmass', metadata, 'airmass')
+    event.copy('dateObs', metadata, 'dateObs')
 
     eventTransmitter = ctrlEvents.EventTransmitter(hostName, topicName)
 
@@ -131,9 +138,9 @@ def EventFromInputfile(inputfile,
     if logger.sends(logger.DEBUG):
         logger.log(logger.DEBUG, "Data Event data:\n%s" % event.toString())
     elif logger.sends(VERB3):
-       logger.log(VERB3,
-                  "Event data: datasetId=%s; ra=%f, dec=%f" %
-                  (event.get("datasetId"), event.get("ra"), event.get("decl")))
+        logger.log(VERB3,
+                   "Event data: datasetId=%s; ra=%f, dec=%f" %
+                   (event.get("datasetId"), event.get("ra"), event.get("decl")))
 
     eventTransmitter.publish(event)
 
@@ -151,4 +158,4 @@ if __name__ == "__main__":
         logger.log(logger.FATAL, str(e))
         traceback.print_exc(file=sys.stderr)
         sys.exit(2)
-    
+

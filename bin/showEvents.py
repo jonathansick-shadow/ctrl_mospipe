@@ -1,9 +1,9 @@
 #! /usr/bin/env python
 
-# 
+#
 # LSST Data Management System
 # Copyright 2008, 2009, 2010 LSST Corporation.
-# 
+#
 # This product includes software developed by the
 # LSST Project (http://www.lsst.org/).
 #
@@ -11,21 +11,25 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
-# You should have received a copy of the LSST License Statement and 
-# the GNU General Public License along with this program.  If not, 
+#
+# You should have received a copy of the LSST License Statement and
+# the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
 
 #
 from __future__ import with_statement
-import sys, os, time, datetime
-import optparse, traceback
+import sys
+import os
+import time
+import datetime
+import optparse
+import traceback
 import lsst.pex.harness.run as run
 from lsst.pex.logging import Log, LogRec
 from lsst.pex.exceptions import LsstException
@@ -38,13 +42,14 @@ desc = """listen for and print events and their properties."""
 
 cl = optparse.OptionParser(usage=usage, description=desc)
 run.addAllVerbosityOptions(cl, "V")
-cl.add_option("-w", "--wait-time", action="store", type="int", default=10, 
+cl.add_option("-w", "--wait-time", action="store", type="int", default=10,
               dest="sleep", metavar="seconds",
               help="seconds to sleep when no events available (def: 10)")
 
 logger = Log(Log.getDefaultLog(), "showEvents")
 VERB = logger.INFO-2
 timeoffset = time.time()
+
 
 def main():
     """execute the showEvents script"""
@@ -64,6 +69,7 @@ def main():
         traceback.print_exc(file=sys.stderr)
         sys.exit(2)
 
+
 def showEvents(broker, topics, sleep=10):
     """
     listen for and print events and their properties
@@ -80,12 +86,14 @@ def showEvents(broker, topics, sleep=10):
     eventRcvrs = makeReceivers(broker, topics)
     listen(eventRcvrs, sleep)
 
+
 def makeReceivers(broker, topics):
 
     out = []
     for topic in topics:
         out.append(events.EventReceiver(broker, topic))
     return out
+
 
 def listen(receivers, sleep):
     try:
@@ -121,7 +129,7 @@ def checkTopics(receivers):
             if silent:
                 continue
             print "%s: DATE=%s, TIMESTAMP=%f" % (rcvr.getTopicName(), date, ts)
-                                                 
+
             if not quiet:
                 print event.toString()
 
